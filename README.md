@@ -9,6 +9,7 @@ This project is a Flutter application that can be integrated with Figma and VSCo
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ## Prerequisites
+* [Source Control](https://github.com/sapoepsilon/streamer/edit/main/README.md#source-control)
 * [Flutter SDK](https://docs.flutter.dev/get-started/install) <br />
 * [Unix Shell](https://github.com/sapoepsilon/Streamer/edit/main/README.md#unix-shell)<br />
 * [VSCode](https://code.visualstudio.com/) (or [Android Studio](https://developer.android.com/studio))<br />
@@ -64,7 +65,21 @@ you installed.
 Note that for some advanced functionality, you might want to consider using a Unix terminal emulator such as Cygwin or Git Bash. They will provide you some of the functionality from 
 a Unix/Linux shell, but it may not be as complete or up-to-date as with a full WSL setup.
 
+## Source Control
 
+Source control, also known as version control, is a system that allows developers to keep track of changes made to the codebase of a project. It is an essential tool for software development, particularly when multiple people are working on the same codebase. Think of it like a notebook where all the changes made to the codebase are recorded.
+
+Here are some popular Git clients for macOS and Windows, with links to their download pages:
+
+### macOS
+[GitHub Desktop](https://desktop.github.com/): This is a Git client that is developed by GitHub and is available for both macOS and Windows. It has a simple and easy-to-use interface and provides access to many of GitHub's features such as pull requests and issue tracking.
+[SourceTree](https://www.sourcetreeapp.com/): This is a Git client developed by Atlassian. It has a powerful set of features and is popular among developers who work with Git on a daily basis.
+[Tower](https://www.git-tower.com/mac): This is a commercial Git client for macOS that offers a visually appealing and intuitive interface. It is known for its powerful branching and merging capabilities and is often used by experienced Git users.
+### Windows
+[GitHub Desktop](https://desktop.github.com/): As mentioned before, also available for Windows
+[SourceTree](https://www.sourcetreeapp.com/): also available for Windows. Available for free download on this page
+[TortoiseGit](https://tortoisegit.org/download/): This is a popular Git client for Windows that is based on the TortoiseSVN client. It integrates seamlessly with Windows Explorer and has a simple, user-friendly interface. It's particularly useful for beginners and it's used widely.
+Please keep in mind that these are just a few popular options, and there may be other Git clients that are suitable for your needs. It's always a good idea to try out a few different options and choose the one that works best for you.
 
 
 ## Acknowledgments
