@@ -15,6 +15,7 @@ These instructions will get you a copy of the project up and running on your loc
 * [VSCode](https://code.visualstudio.com/) (or [Android Studio](https://developer.android.com/studio))<br />
 * A running [Subsonic server](http://www.subsonic.org/pages/index.jsp) (can be self-hosted or accessed via a remote server)<br />
 * Subsonic API credentials (username and password)<br />
+* [Teams](https://www.microsoft.com/en-us/microsoft-teams/download-app)
 
 Clone the repository<br />
 ```
