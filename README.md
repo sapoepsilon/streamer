@@ -7,6 +7,7 @@ This project is a Flutter application that can be integrated with Figma and VSCo
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+[Join our teams channel](https://teams.microsoft.com/l/team/19%3a6yObTI8Wffsk6MSA_0HydZOZE7k-0EJMT58PbZJcAsg1%40thread.tacv2/conversations?groupId=53fe00c0-3a9a-49d9-9093-e20845cdce1d&tenantId=5a57404a-b412-4229-8d67-303fda6c124b)
 
 ## Prerequisites
 * [Source Control](https://github.com/sapoepsilon/streamer/edit/main/README.md#source-control)
