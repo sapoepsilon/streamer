@@ -81,6 +81,8 @@ Here are some popular Git clients for macOS and Windows, with links to their dow
 [TortoiseGit](https://tortoisegit.org/download/): This is a popular Git client for Windows that is based on the TortoiseSVN client. It integrates seamlessly with Windows Explorer and has a simple, user-friendly interface. It's particularly useful for beginners and it's used widely.
 Please keep in mind that these are just a few popular options, and there may be other Git clients that are suitable for your needs. It's always a good idea to try out a few different options and choose the one that works best for you.
 
+Learn [GIT](https://docs.github.com/en/get-started/quickstart/git-and-github-learning-resources)
+
 
 ## Acknowledgments
 
