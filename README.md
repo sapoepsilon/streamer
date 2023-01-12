@@ -77,13 +77,13 @@ Source control, also known as version control, is a system that allows developer
 Here are some popular Git clients for macOS and Windows, with links to their download pages:
 
 ### macOS
-[GitHub Desktop](https://desktop.github.com/): This is a Git client that is developed by GitHub and is available for both macOS and Windows. It has a simple and easy-to-use interface and provides access to many of GitHub's features such as pull requests and issue tracking.
-[SourceTree](https://www.sourcetreeapp.com/): This is a Git client developed by Atlassian. It has a powerful set of features and is popular among developers who work with Git on a daily basis.
-[Tower](https://www.git-tower.com/mac): This is a commercial Git client for macOS that offers a visually appealing and intuitive interface. It is known for its powerful branching and merging capabilities and is often used by experienced Git users.
+[GitHub Desktop](https://desktop.github.com/): This is a Git client that is developed by GitHub and is available for both macOS and Windows. It has a simple and easy-to-use interface and provides access to many of GitHub's features such as pull requests and issue tracking.<br />
+[SourceTree](https://www.sourcetreeapp.com/): This is a Git client developed by Atlassian. It has a powerful set of features and is popular among developers who work with Git on a daily basis.<br />
+[Tower](https://www.git-tower.com/mac): This is a commercial Git client for macOS that offers a visually appealing and intuitive interface. It is known for its powerful branching and merging capabilities and is often used by experienced Git users.<br />
 ### Windows
 [GitHub Desktop](https://desktop.github.com/): As mentioned before, also available for Windows
-[SourceTree](https://www.sourcetreeapp.com/): also available for Windows. Available for free download on this page
-[TortoiseGit](https://tortoisegit.org/download/): This is a popular Git client for Windows that is based on the TortoiseSVN client. It integrates seamlessly with Windows Explorer and has a simple, user-friendly interface. It's particularly useful for beginners and it's used widely.
+[SourceTree](https://www.sourcetreeapp.com/): also available for Windows. Available for free download on this page <br />
+[TortoiseGit](https://tortoisegit.org/download/): This is a popular Git client for Windows that is based on the TortoiseSVN client. It integrates seamlessly with Windows Explorer and has a simple, user-friendly interface. It's particularly useful for beginners and it's used widely.<br />
 Please keep in mind that these are just a few popular options, and there may be other Git clients that are suitable for your needs. It's always a good idea to try out a few different options and choose the one that works best for you.
 
 ## Figma
