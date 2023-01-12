@@ -10,9 +10,9 @@ These instructions will get you a copy of the project up and running on your loc
 [Join our teams channel](https://teams.microsoft.com/l/team/19%3a6yObTI8Wffsk6MSA_0HydZOZE7k-0EJMT58PbZJcAsg1%40thread.tacv2/conversations?groupId=53fe00c0-3a9a-49d9-9093-e20845cdce1d&tenantId=5a57404a-b412-4229-8d67-303fda6c124b)
 
 ## Prerequisites
-* [Source Control](https://github.com/sapoepsilon/streamer/edit/main/README.md#source-control)
+* [Source Control](https://github.com/sapoepsilon/streamer#source-control)
 * [Flutter SDK](https://docs.flutter.dev/get-started/install) <br />
-* [Unix Shell](https://github.com/sapoepsilon/Streamer/edit/main/README.md#unix-shell)<br />
+* [Unix Shell](https://github.com/sapoepsilon/streamer/#unix-shell)<br />
 * [VSCode](https://code.visualstudio.com/) (or [Android Studio](https://developer.android.com/studio))<br />
 * A running [Subsonic server](http://www.subsonic.org/pages/index.jsp) (can be self-hosted or accessed via a remote server)<br />
 * Subsonic API credentials (username and password)<br />
