@@ -1,6 +1,8 @@
 # streamer
 Yet another subsonic client
 
+<img width="851" alt="image" src="https://user-images.githubusercontent.com/47342870/211945081-9ae95fd4-35bd-486a-9d85-8cd4f4c362aa.png">
+
 
 This project is a Flutter application that can be integrated with Figma and VSCode.
 
@@ -17,6 +19,7 @@ These instructions will get you a copy of the project up and running on your loc
 * A running [Subsonic server](http://www.subsonic.org/pages/index.jsp) (can be self-hosted or accessed via a remote server)<br />
 * Subsonic API credentials (username and password)<br />
 * [Teams](https://www.microsoft.com/en-us/microsoft-teams/download-app)
+* [Figma](httos://www.figma.com/)
 
 Clone the repository<br />
 ```
@@ -82,6 +85,9 @@ Here are some popular Git clients for macOS and Windows, with links to their dow
 [SourceTree](https://www.sourcetreeapp.com/): also available for Windows. Available for free download on this page
 [TortoiseGit](https://tortoisegit.org/download/): This is a popular Git client for Windows that is based on the TortoiseSVN client. It integrates seamlessly with Windows Explorer and has a simple, user-friendly interface. It's particularly useful for beginners and it's used widely.
 Please keep in mind that these are just a few popular options, and there may be other Git clients that are suitable for your needs. It's always a good idea to try out a few different options and choose the one that works best for you.
+
+## Figma
+We will be using for UI changes. Feel free to make suggestions to our [mockup](https://www.figma.com/file/mNRohLimliXIuyFfmbxT50/Streamer?node-id=0%3A1&t=VYFrIuDYIeraD1np-1)
 
 Learn [GIT](https://docs.github.com/en/get-started/quickstart/git-and-github-learning-resources)
 
