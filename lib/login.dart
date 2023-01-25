@@ -1,213 +1,28 @@
+import 'dart:convert';
+import 'dart:math';
+
+import 'package:crypto/crypto.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/material.dart'
-    show
-        Alignment,
-        AlwaysScrollableScrollPhysics,
-        AnnotatedRegion,
-        BorderRadius,
-        BoxDecoration,
-        BoxShadow,
-        BuildContext,
-        Color,
-        Colors,
-        Column,
-        Container,
-        CrossAxisAlignment,
-        EdgeInsets,
-        ElevatedButton,
-        FontWeight,
-        GestureDetector,
-        Icon,
-        Icons,
-        InputBorder,
-        InputDecoration,
-        MainAxisAlignment,
-        Offset,
-        RadialGradient,
-        RoundedRectangleBorder,
-        Scaffold,
-        SingleChildScrollView,
-        SizedBox,
-        Stack,
-        State,
-        StatefulWidget,
-        Text,
-        TextField,
-        TextInputType,
-        TextStyle,
-        Widget;
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:streamer/Home.dart';
+import 'package:streamer/helpers/helpers.dart';
+import 'package:streamer/model/nowPlayingResponse.dart';
+import 'package:xml2json/xml2json.dart';
 
-class login extends StatefulWidget {
+class Login extends StatefulWidget {
+  const Login({super.key});
+
   @override
-  _login createState() => _login();
+  _Login createState() => _Login();
 }
 
-Widget server() {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-      // Text(
-      //   "Server",
-      //   style: TextStyle(
-      //       color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-      // ),
-      // SizedBox(height: 10),
-      Container(
-        alignment: Alignment.centerLeft,
-        decoration: BoxDecoration(
-            color: Color.fromRGBO(0, 0, 0, .5),
-            borderRadius: BorderRadius.circular(45),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black26, blurRadius: 6, offset: Offset(0, 2))
-            ]),
-        height: 60,
-        child: TextField(
-          keyboardType: TextInputType.number,
-          style: TextStyle(color: Colors.white),
-          decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14),
-              prefixIcon: Icon(Icons.search, color: Color(0xFFA51C1C)),
-              hintText: "123.456.789.123",
-              hintStyle: TextStyle(color: Color.fromARGB(156, 255, 255, 255))),
-        ),
-      )
-    ],
-  );
-}
+class _Login extends State<Login> {
+  String _name = "";
+  String _server = "";
+  String _username = "";
+  String _password = "";
 
-Widget password() {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-      // Text(
-      //   "Password",
-      //   style: TextStyle(
-      //       color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-      // ),
-      // SizedBox(height: 10),
-      Container(
-        alignment: Alignment.centerLeft,
-        decoration: BoxDecoration(
-            color: Color.fromRGBO(0, 0, 0, .5),
-            borderRadius: BorderRadius.circular(45),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black26, blurRadius: 6, offset: Offset(0, 2))
-            ]),
-        height: 60,
-        child: TextField(
-          obscureText: true,
-          style: TextStyle(color: Colors.white),
-          decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14),
-              prefixIcon: Icon(Icons.lock, color: Color(0xFFA51C1C)),
-              hintText: "Password",
-              hintStyle: TextStyle(color: Color.fromARGB(156, 255, 255, 255))),
-        ),
-      )
-    ],
-  );
-}
-
-Widget name() {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-      // Text(
-      //   "Name",
-      //   style: TextStyle(
-      //       color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-      // ),
-      // SizedBox(height: 10),
-      Container(
-        alignment: Alignment.centerLeft,
-        decoration: BoxDecoration(
-            color: Color.fromRGBO(0, 0, 0, .5),
-            borderRadius: BorderRadius.circular(45),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black26, blurRadius: 6, offset: Offset(0, 2))
-            ]),
-        height: 60,
-        child: TextField(
-          keyboardType: TextInputType.text,
-          style: TextStyle(color: Colors.white),
-          decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14),
-              prefixIcon:
-                  Icon(Icons.perm_contact_cal, color: Color(0xFFA51C1C)),
-              hintText: "Name",
-              hintStyle: TextStyle(color: Color.fromARGB(156, 255, 255, 255))),
-        ),
-      )
-    ],
-  );
-}
-
-Widget username() {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-      // Text(
-      //   "UserName",
-      //   style: TextStyle(
-      //       color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-      // ),
-      // SizedBox(height: 10),
-      Container(
-        alignment: Alignment.centerLeft,
-        decoration: BoxDecoration(
-            color: Color.fromRGBO(0, 0, 0, 0.498),
-            borderRadius: BorderRadius.circular(45),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black26, blurRadius: 6, offset: Offset(0, 2))
-            ]),
-        height: 60,
-        child: TextField(
-          keyboardType: TextInputType.text,
-          style: TextStyle(color: Colors.white),
-          decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14),
-              prefixIcon: Icon(Icons.supervised_user_circle_rounded,
-                  color: Color(0xFFA51C1C)),
-              hintText: "UserName",
-              hintStyle: TextStyle(color: Color.fromARGB(156, 255, 255, 255))),
-        ),
-      )
-    ],
-  );
-}
-
-Widget conect() {
-  return Container(
-    padding: EdgeInsets.symmetric(vertical: 25),
-    width: double.infinity,
-    child: ElevatedButton(
-      onPressed: () => print("Login Pressed"),
-      style: ElevatedButton.styleFrom(
-          minimumSize: Size(80, 60),
-          backgroundColor: Colors.purple.shade900,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(45))),
-      child: Text(
-        "Conect",
-        style: TextStyle(
-          color: Color.fromARGB(222, 24, 167, 214),
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    ),
-  );
-}
-
-class _login extends State<login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -219,18 +34,7 @@ class _login extends State<login> {
               Container(
                 height: double.infinity,
                 width: double.infinity,
-                decoration: BoxDecoration(
-                    //   gradient: LinearGradient(
-                    //       // begin: Alignment.topCenter,
-                    //       // end: Alignment.bottomCenter,
-                    //       colors: [
-                    //     Color.fromRGBO(81, 226, 209, 0.39),
-                    //     Color.fromRGBO(81, 226, 209, 0.39),
-                    //     Color.fromRGBO(81, 226, 209, 0.39),
-                    //     Color.fromRGBO(81, 226, 209, 0.39),
-                    //     Color.fromRGBO(81, 226, 209, 0.39),
-                    //   ]
-                    // )
+                decoration: const BoxDecoration(
                     gradient: RadialGradient(
                   colors: [
                     Colors.teal,
@@ -240,26 +44,27 @@ class _login extends State<login> {
                 )),
                 child: SingleChildScrollView(
                   // physics: AlwaysScrollableScrollPhysics(),
-                  padding: EdgeInsets.symmetric(horizontal: 25, vertical: 120),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 25, vertical: 120),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text(
+                      const Text(
                         "Streamer",
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 32,
                             fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 130),
+                      const SizedBox(height: 130),
                       server(),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       name(),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       username(),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       password(),
-                      SizedBox(height: 70),
+                      const SizedBox(height: 70),
                       conect()
                       // buildforgotPassBtn(),
                     ],
@@ -271,5 +76,151 @@ class _login extends State<login> {
         ),
       ),
     );
+  }
+
+  Widget server() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          alignment: Alignment.centerLeft,
+          decoration: loginTextFieldBackground(),
+          height: 60,
+          child: TextField(
+            keyboardType: TextInputType.number,
+            onChanged: (value) {
+              setState(() {
+                _server = value;
+              });
+            },
+            style: const TextStyle(color: Colors.white),
+            decoration: loginTextDecoration("123.456.789.123"),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget password() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          alignment: Alignment.centerLeft,
+          decoration: loginTextFieldBackground(),
+          height: 60,
+          child: TextField(
+            obscureText: true,
+            onChanged: (value) {
+              setState(() {
+                _password = value;
+              });
+            },
+            style: const TextStyle(color: Colors.white),
+            decoration: loginTextDecoration("Password"),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget name() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          alignment: Alignment.centerLeft,
+          decoration: loginTextFieldBackground(),
+          height: 60,
+          child: TextField(
+              keyboardType: TextInputType.text,
+              onChanged: (value) {
+                setState(() {
+                  _name = value;
+                });
+              },
+              style: const TextStyle(color: Colors.white),
+              decoration: loginTextDecoration("Name")),
+        )
+      ],
+    );
+  }
+
+  Widget username() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          alignment: Alignment.centerLeft,
+          decoration: loginTextFieldBackground(),
+          height: 60,
+          child: TextField(
+            keyboardType: TextInputType.text,
+            onChanged: (value) {
+              setState(() {
+                _username = value;
+              });
+            },
+            style: const TextStyle(color: Colors.white),
+            decoration: loginTextDecoration("Username"),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget conect() {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 25),
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: _connectToServer,
+        style: ElevatedButton.styleFrom(
+            minimumSize: Size(80, 60),
+            backgroundColor: Colors.purple.shade900,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(45))),
+        child: const Text(
+          "Conect",
+          style: TextStyle(
+            color: Color.fromARGB(222, 24, 167, 214),
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _connectToServer() async {
+    String random = generateRandomString(7);
+    String token = makeToken(_password, random);
+
+    const id = 'ab';
+
+    late final folder;
+    try {
+       folder = await http.get(Uri.parse(
+          'http://$_server/rest/getNowPlaying.view?u=$_username&t=$token&s=$random&v=1.61.0&c=streamer'));
+    } catch (e) {
+        print("Error connecting: $e");
+    }
+
+    print("request: ${folder.request}");
+    print("Server response: ${folder.request}");
+
+    if (folder.statusCode == 200) {
+      final Xml2Json xml2json = Xml2Json();
+      xml2json.parse(utf8.decode(folder.bodyBytes));
+      final json = xml2json.toGData();
+      final nowPlayingResponse = json;
+      final NowPlaying nowPlaying = nowPlayingFromJson(nowPlayingResponse);
+      debugPrint(nowPlaying.toString());
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => Home(nowPlaying: nowPlaying)));
+    } else {
+      // If that call was not successful, throw an error.
+      throw Exception('Failed to load data');
+    }
   }
 }
