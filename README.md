@@ -32,6 +32,7 @@ Open the project in VSCode
 Install the required packages by running
 ```
 flutter packages get
+
 ```
 
 Run the project on an emulator or device by pressing F5 or using the command
