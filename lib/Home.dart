@@ -24,6 +24,26 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     nowPlaying = widget.nowPlaying;
     return Scaffold(
+          floatingActionButtonLocation:
+          FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Container(
+        child: ElevatedButton(
+          onPressed: _playNowPlaying,
+          style: ElevatedButton.styleFrom(
+              minimumSize: Size(80, 60),
+              backgroundColor: Colors.purple.shade900,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(45))),
+          child: const Text(
+            "Play nowPlaying",
+            style: TextStyle(
+              color: Color.fromARGB(222, 24, 167, 214),
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
       body: Column(
         children: [
           const SizedBox(
@@ -47,22 +67,7 @@ class _HomeState extends State<Home> {
             "Artist: ${nowPlaying.subsonicResponse.nowPlaying.entry.title.toString()}",
             style: const TextStyle(fontSize: 20),
           ),
-          ElevatedButton(
-            onPressed: _playNowPlaying,
-            style: ElevatedButton.styleFrom(
-                minimumSize: Size(80, 60),
-                backgroundColor: Colors.purple.shade900,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(45))),
-            child: const Text(
-              "Play nowPlaying",
-              style: TextStyle(
-                color: Color.fromARGB(222, 24, 167, 214),
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
+
         ],
       ),
     );
