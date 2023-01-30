@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:streamer/Home.dart';
 import 'package:streamer/helpers/helpers.dart';
-import 'package:streamer/model/getArtistsResponse.dart';
 import 'package:streamer/model/nowPlayingResponse.dart';
 import 'package:xml2json/xml2json.dart';
 
@@ -199,8 +198,13 @@ class _Login extends State<Login> {
 
     const id = 'ab';
 
-    final folder = await http.get(Uri.parse(
-        'http://$_server/rest/getArtists.view?u=$_username&t=$token&s=$random&v=1.61.0&c=streamer'));
+    late final folder;
+    try {
+      folder = await http.get(Uri.parse(
+          'http://$_server/rest/getNowPlaying.view?u=$_username&t=$token&s=$random&v=1.61.0&c=streamer'));
+    } catch (e) {
+      print("Error connecting: $e");
+    }
 
     print("request: ${folder.request}");
     print("Server response: ${folder.request}");
@@ -210,20 +214,13 @@ class _Login extends State<Login> {
       xml2json.parse(utf8.decode(folder.bodyBytes));
       final json = xml2json.toGData();
       final nowPlayingResponse = json;
-      print("Get artists json: $nowPlayingResponse");
-      late GetArtists getArtists;
-      try {
-        getArtists = getArtistsFromJson(nowPlayingResponse);
-      } catch (e) {
-        print("error parsing nowplaying $e");
-      }
-
-      if (getArtists != null) {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => Home(getArtists: getArtists)));
-      } else {
-        print("now playing is null");
-      }
+      final NowPlaying nowPlaying = nowPlayingFromJson(nowPlayingResponse);
+      debugPrint(nowPlaying.toString());
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => Home(
+                nowPlaying: nowPlaying,
+                server: _server,
+              )));
     } else {
       // If that call was not successful, throw an error.
       throw Exception('Failed to load data');
