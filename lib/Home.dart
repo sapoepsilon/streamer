@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:streamer/Player.dart';
+import 'package:streamer/model/getArtistsResponse.dart';
 import 'package:streamer/model/nowPlayingResponse.dart';
 import 'package:xml2json/xml2json.dart';
 import 'package:http/http.dart' as http;
@@ -9,26 +10,25 @@ import 'package:http/http.dart' as http;
 import 'helpers/helpers.dart';
 
 class Home extends StatefulWidget {
-  final NowPlaying nowPlaying;
+  final GetArtists getArtists;
 
-  const Home({Key? key, required this.nowPlaying}) : super(key: key);
+  const Home({Key? key, required this.getArtists}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  late NowPlaying nowPlaying;
+  late GetArtists getArtists;
 
   @override
   Widget build(BuildContext context) {
-    nowPlaying = widget.nowPlaying;
+    getArtists = widget.getArtists;
     return Scaffold(
-          floatingActionButtonLocation:
-          FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Container(
         child: ElevatedButton(
-          onPressed: _playNowPlaying,
+          onPressed: something,
           style: ElevatedButton.styleFrom(
               minimumSize: Size(80, 60),
               backgroundColor: Colors.purple.shade900,
@@ -44,47 +44,42 @@ class _HomeState extends State<Home> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          const SizedBox(
-            height: 30,
-          ),
-          const Text(
-            "Now playing",
-            style: TextStyle(fontSize: 40),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          SelectableText(
-            "Artist: ${nowPlaying.subsonicResponse.nowPlaying.entry.artist.toString()}",
-            style: const TextStyle(fontSize: 20),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          SelectableText(
-            "Artist: ${nowPlaying.subsonicResponse.nowPlaying.entry.title.toString()}",
-            style: const TextStyle(fontSize: 20),
-          ),
-
-        ],
-      ),
+      body: ListView.builder(
+        itemCount: getArtists.subsonicResponse.artists.index.length,
+        itemBuilder: (context, index) {
+          return ListTile(title: Text(getArtists.subsonicResponse.artists.index[index].artist.name));
+        },
+      )
     );
   }
 
-  Future<void> _playNowPlaying() async {
-    String random = generateRandomString(7);
-    String token = makeToken("Faridonaka48@", random);
-
-    const id = 'ab';
-
-    final currentSong =
-        'http://localhost:4533/rest/stream.view?u=machinegun&t=$token&s=$random&v=1.61.0&c=streamer%id=${widget.nowPlaying.subsonicResponse.nowPlaying.entry.id.toString()}';
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => Player(
-              url: currentSong,
-              key: null,
-            )));
+  void something() {
+    print("something");
   }
+
+
+  // Future<void> _playNowPlaying() async {
+  //   String random = generateRandomString(7);
+  //   String token = makeToken("Faridonaka48@", random);
+  //
+  //   print(
+  //       "user agent id: ${nowPlaying.subsonicResponse.nowPlaying.entry.playerId}");
+  //   print(
+  //       "user agent name: ${nowPlaying.subsonicResponse.nowPlaying.entry.playerName}");
+  //
+  //   const id = 'ab';
+  //
+  //   final currentSong =
+  //       widget.nowPlaying.subsonicResponse.nowPlaying.entry.id.toString();
+  //   print("id: ${nowPlaying.subsonicResponse.nowPlaying.entry.id}");
+  //   Navigator.of(context).push(MaterialPageRoute(
+  //       builder: (context) => Player(
+  //             url:
+  //                 "http://100.91.82.12:4533/rest/stream.view?u=machinegun&t=67154ac6fc995066b1bf6e4486a73d38&s=tZplde%5C&v=1.61.0&c=streamer&id=${currentSong}",
+  //             key: null,
+  //           ))
+  //   );
+  //
+  //
+  // }
 }

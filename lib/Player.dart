@@ -1,13 +1,35 @@
 import 'dart:developer';
 
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:streamer/helpers/helpers.dart';
+
+import 'package:just_audio/just_audio.dart';
+
+class AudioPlayerHandler extends BaseAudioHandler {
+  final _player = AudioPlayer();
+
+  AudioPlayerHandler(String url) {
+    String random = generateRandomString(7);
+
+    print("new play---------------------------- \n\n\n\n\n\n\n\n\n\n");
+
+    final token = makeToken("Faridonaka48@", random);
+    _player.setUrl(url);
+  }
+
+  @override
+  Future<void> play() => _player.play();
+
+  @override
+  Future<void> pause() => _player.pause();
+}
 
 class Player extends StatefulWidget {
   final String url;
 
-  const Player({Key? key, required this.url})
-      : super(key: key);
+  const Player({Key? key, required this.url}) : super(key: key);
 
   @override
   _Player createState() => _Player();
@@ -17,28 +39,27 @@ class _Player extends State<Player> {
   late AudioPlayer _audioPlayer;
   bool _isPlaying = false;
   late ScrollController _scrollController;
+  late AudioPlayerHandler _audioHandler;
 
   @override
   void initState() {
     super.initState();
-    _audioPlayer = AudioPlayer();
+    _audioHandler = AudioPlayerHandler(widget.url);
     _scrollController = ScrollController();
   }
 
   void _play() async {
-    log("url: ${widget.url}");
-      final duration = await _audioPlayer.setUrl("https://wpr-ice.streamguys1.com/wpr-ideas-mp3-64");
-
-
-    try {
-      await _audioPlayer.play();
-    } catch (e) {
-      log("error while playing: $e");
-    }
+    _audioHandler.play();
+    setState(() {
+      _isPlaying = true;
+    });
   }
 
   void _pause() async {
-  await _audioPlayer.pause();
+    await _audioHandler.pause();
+    setState(() {
+      _isPlaying = false;
+    });
   }
 
   void _showErrorDialog() {
