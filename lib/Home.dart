@@ -1,32 +1,33 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:streamer/Player.dart';
+import 'package:streamer/Player/Player.dart';
 import 'package:streamer/model/nowPlayingResponse.dart';
+import 'package:streamer/model/nowPlayingResponseSingle.dart' as list;
 import 'package:xml2json/xml2json.dart';
 import 'package:http/http.dart' as http;
 
 import 'helpers/helpers.dart';
 
 class Home extends StatefulWidget {
-  final NowPlaying nowPlaying;
+  final Entry nowPlaying;
   final String server;
 
-  const Home({Key? key, required this.nowPlaying, required this.server}) : super(key: key);
+  const Home({Key? key, required this.nowPlaying, required this.server})
+      : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  late NowPlaying nowPlaying;
+  late Entry nowPlaying;
 
   @override
   Widget build(BuildContext context) {
     nowPlaying = widget.nowPlaying;
     return Scaffold(
-      floatingActionButtonLocation:
-      FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Container(
         child: ElevatedButton(
           onPressed: _playNowPlaying,
@@ -58,17 +59,17 @@ class _HomeState extends State<Home> {
             height: 20,
           ),
           SelectableText(
-            "Artist: ${nowPlaying.subsonicResponse.nowPlaying.entry.artist.toString()}",
+            "Artist: ${nowPlaying.artist.toString()}",
             style: const TextStyle(fontSize: 20),
           ),
           const SizedBox(
             height: 20,
           ),
           SelectableText(
-            "Artist: ${nowPlaying.subsonicResponse.nowPlaying.entry.title.toString()}",
+            "Artist: ${nowPlaying.title.toString()}",
             style: const TextStyle(fontSize: 20),
           ),
-
+          SelectableText("Genre: ${nowPlaying.genre}")
         ],
       ),
     );
@@ -81,11 +82,15 @@ class _HomeState extends State<Home> {
     const id = 'ab';
 
     final currentSong =
-        'http://${widget.server}/rest/stream.view?u=machinegun&t=$token&s=$random&v=1.61.0&c=streamer%id=${widget.nowPlaying.subsonicResponse.nowPlaying.entry.id.toString()}';
+        'http://${widget.server}/rest/stream.view?u=machinegun&t=$token&s=$random&v=1.61.0&c=streamer&id=${widget.nowPlaying.id.toString()}';
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => Player(
-          url: currentSong,
-          key: null,
-        )));
+              url: currentSong,
+              serverURL: widget.server,
+              songID:
+                  widget.nowPlaying.coverArt,
+              albumName: widget.nowPlaying.album,
+              key: null,
+            )));
   }
 }

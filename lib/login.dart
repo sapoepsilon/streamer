@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:streamer/Home.dart';
 import 'package:streamer/helpers/helpers.dart';
 import 'package:streamer/model/nowPlayingResponse.dart';
+import 'package:streamer/model/nowPlayingResponseSingle.dart' as multiple;
 import 'package:xml2json/xml2json.dart';
 
 class Login extends StatefulWidget {
@@ -192,6 +193,14 @@ class _Login extends State<Login> {
     );
   }
 
+  void _navigateToHome(Entry subsonicResponse) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => Home(
+          nowPlaying: subsonicResponse,
+          server: _server,
+        )));
+  }
+
   void _connectToServer() async {
     String random = generateRandomString(7);
     String token = makeToken(_password, random);
@@ -213,17 +222,30 @@ class _Login extends State<Login> {
       final Xml2Json xml2json = Xml2Json();
       xml2json.parse(utf8.decode(folder.bodyBytes));
       final json = xml2json.toGData();
-      final nowPlayingResponse = json;
-      final NowPlaying nowPlaying = nowPlayingFromJson(nowPlayingResponse);
-      debugPrint(nowPlaying.toString());
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Home(
-                nowPlaying: nowPlaying,
-                server: _server,
-              )));
-    } else {
-      // If that call was not successful, throw an error.
-      throw Exception('Failed to load data');
+      var isError = false;
+      NowPlaying nowPlayingResponse;
+      multiple.NowPlayingMultiple nowPlayingMultipleResponse;
+
+      try {
+        nowPlayingResponse = nowPlayingFromJson(json);
+        _navigateToHome(nowPlayingResponse.subsonicResponse.nowPlaying.entry);
+      } catch (e) {
+        print("Multiple songs are playing right now. Attempting to connect");
+        isError = true;
+      }
+
+      if (isError){
+
+        try {
+          nowPlayingMultipleResponse = multiple.nowPlayingMultipleFromJson(json);
+          isError = false;
+          _navigateToHome(nowPlayingMultipleResponse.subsonicResponse.nowPlaying.entry.last);
+        } catch (e) {
+          print("Error parsing multiple $e");
+        }
+
+      }
     }
+
   }
 }

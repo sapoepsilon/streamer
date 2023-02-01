@@ -84,6 +84,9 @@ class Entry {
     required this.title,
     required this.album,
     required this.artist,
+    required this.track,
+    required this.year,
+    required this.genre,
     required this.coverArt,
     required this.size,
     required this.contentType,
@@ -91,9 +94,9 @@ class Entry {
     required this.duration,
     required this.bitRate,
     required this.path,
+    required this.discNumber,
     required this.created,
     required this.albumId,
-    required this.artistId,
     required this.type,
     required this.isVideo,
     required this.username,
@@ -108,6 +111,9 @@ class Entry {
   String title;
   String album;
   String artist;
+  String track;
+  String year;
+  String genre;
   String coverArt;
   String size;
   String contentType;
@@ -115,9 +121,9 @@ class Entry {
   String duration;
   String bitRate;
   String path;
+  String discNumber;
   DateTime created;
   String albumId;
-  String artistId;
   String type;
   String isVideo;
   String username;
@@ -132,6 +138,9 @@ class Entry {
     title: json["title"],
     album: json["album"],
     artist: json["artist"],
+    track: json["track"],
+    year: json["year"],
+    genre: json["genre"],
     coverArt: json["coverArt"],
     size: json["size"],
     contentType: json["contentType"],
@@ -139,9 +148,9 @@ class Entry {
     duration: json["duration"],
     bitRate: json["bitRate"],
     path: json["path"],
+    discNumber: json["discNumber"],
     created: DateTime.parse(json["created"]),
     albumId: json["albumId"],
-    artistId: json["artistId"],
     type: json["type"],
     isVideo: json["isVideo"],
     username: json["username"],
@@ -157,6 +166,9 @@ class Entry {
     "title": title,
     "album": album,
     "artist": artist,
+    "track": track,
+    "year": year,
+    "genre": genre,
     "coverArt": coverArt,
     "size": size,
     "contentType": contentType,
@@ -164,9 +176,9 @@ class Entry {
     "duration": duration,
     "bitRate": bitRate,
     "path": path,
+    "discNumber": discNumber,
     "created": created.toIso8601String(),
     "albumId": albumId,
-    "artistId": artistId,
     "type": type,
     "isVideo": isVideo,
     "username": username,
@@ -175,3 +187,4 @@ class Entry {
     "playerName": playerName,
   };
 }
+
