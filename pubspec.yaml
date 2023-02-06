@@ -43,6 +43,7 @@ dependencies:
   pedantic: ^1.11.1
   flutter_cache_manager: ^3.3.0
   audio_service: ^0.18.9
+  shared_preferences: ^2.0.17
 
 dev_dependencies:
   flutter_test:
