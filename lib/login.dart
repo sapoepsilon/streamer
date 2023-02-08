@@ -199,6 +199,7 @@ class _Login extends State<Login> {
   void _connectToServer() async {
     String random = generateRandomString(7);
     String token = makeToken(_password, random);
+    String errorMessage = "";
     final ctx = SubsonicContext(
         serverId: "Docker",
         name: _name,
@@ -206,8 +207,10 @@ class _Login extends State<Login> {
         user: _username,
         pass: _password);
 
+
     var pong = await Ping().run(ctx).catchError((err) {
       debugPrint('error: network issue? $err');
+      errorMessage = err.toString();
       return Future.value(SubsonicResponse(
         ResponseStatus.failed,
         "Network issue",
@@ -218,7 +221,27 @@ class _Login extends State<Login> {
     if (pong.status == ResponseStatus.ok) {
       saveCredentials(_username, _password, _server);
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Home(subSonicContext: ctx))); //TODO: do not use Navigator in async method
+          builder: (context) => Home(
+              subSonicContext:
+                  ctx))); //TODO: do not use Navigator in async method
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text('An error has occurred ${pong.status.name}'),
+            actions: [
+              ElevatedButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 }
