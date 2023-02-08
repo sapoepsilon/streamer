@@ -2,30 +2,38 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:streamer/Player.dart';
-import 'package:streamer/model/nowPlayingResponse.dart';
+import 'package:streamer/subsonic/context.dart';
+import 'package:streamer/subsonic/requests/get_artists.dart';
 import 'package:xml2json/xml2json.dart';
 import 'package:http/http.dart' as http;
 
 import 'helpers/helpers.dart';
 
 class Home extends StatefulWidget {
-  final NowPlaying nowPlaying;
+  const Home({Key? key, required this.subSonicContext}) : super(key: key);
+  final subSonicContext;
 
-  const Home({Key? key, required this.nowPlaying}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
-  late NowPlaying nowPlaying;
+  void fetchArtist(subSonicContext) async {
+    final artists = await  GetArtistsRequest().run(subSonicContext);
 
+    artists.data;
+    for (var artist in artists.data.index) {
+      print("artist name ${artist.name} artist: ${artist.artist} \n");
+    }
+  }
+
+class _HomeState extends State<Home> {
+  late List <Artist> artists;
   @override
   Widget build(BuildContext context) {
-    nowPlaying = widget.nowPlaying;
+    fetchArtist(widget.subSonicContext);
     return Scaffold(
-          floatingActionButtonLocation:
-          FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Container(
         child: ElevatedButton(
           onPressed: _playNowPlaying,
@@ -45,6 +53,20 @@ class _HomeState extends State<Home> {
         ),
       ),
       body: Column(
+        children: const [
+          SizedBox(
+            height: 30,
+          ),
+          Text(
+            "Now playing",
+            style: TextStyle(fontSize: 40),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          SizedBox(
+            height: 20,
+          ),
         children: [
           const SizedBox(
             height: 30,
@@ -67,7 +89,6 @@ class _HomeState extends State<Home> {
             "Artist: ${nowPlaying.subsonicResponse.nowPlaying.entry.title.toString()}",
             style: const TextStyle(fontSize: 20),
           ),
-
         ],
       ),
     );
@@ -78,9 +99,9 @@ class _HomeState extends State<Home> {
     String token = makeToken("Faridonaka48@", random);
 
     const id = 'ab';
-
+// TODO: Use new API to play songs
     final currentSong =
-        'http://localhost:4533/rest/stream.view?u=machinegun&t=$token&s=$random&v=1.61.0&c=streamer%id=${widget.nowPlaying.subsonicResponse.nowPlaying.entry.id.toString()}';
+    'http://localhost:4533/rest/stream.view?u=machinegun&t=$token&s=$random&v=1.61.0&c=streamer%id=${widget.nowPlaying.subsonicResponse.nowPlaying.entry.id.toString()}';
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => Player(
               url: currentSong,

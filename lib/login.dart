@@ -7,7 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:streamer/Home.dart';
 import 'package:streamer/helpers/helpers.dart';
-import 'package:streamer/model/nowPlayingResponse.dart';
+import 'package:streamer/subsonic/context.dart';
+import 'package:streamer/subsonic/requests/get_artists.dart';
+import 'package:streamer/subsonic/requests/ping.dart';
+import 'package:streamer/subsonic/response.dart';
+import 'package:streamer/utils/SharedPreferences.dart';
+
 import 'package:xml2json/xml2json.dart';
 
 class Login extends StatefulWidget {
@@ -195,32 +200,49 @@ class _Login extends State<Login> {
   void _connectToServer() async {
     String random = generateRandomString(7);
     String token = makeToken(_password, random);
+    String errorMessage = "";
+    final ctx = SubsonicContext(
+        serverId: "Docker",
+        name: _name,
+        endpoint: Uri.parse(_server),
+        user: _username,
+        pass: _password);
 
-    const id = 'ab';
 
-    late final folder;
-    try {
-       folder = await http.get(Uri.parse(
-          'http://$_server/rest/getNowPlaying.view?u=$_username&t=$token&s=$random&v=1.61.0&c=streamer'));
-    } catch (e) {
-        print("Error connecting: $e");
-    }
+    var pong = await Ping().run(ctx).catchError((err) {
+      debugPrint('error: network issue? $err');
+      errorMessage = err.toString();
+      return Future.value(SubsonicResponse(
+        ResponseStatus.failed,
+        "Network issue",
+        '',
+      ));
+    });
 
-    print("request: ${folder.request}");
-    print("Server response: ${folder.request}");
-
-    if (folder.statusCode == 200) {
-      final Xml2Json xml2json = Xml2Json();
-      xml2json.parse(utf8.decode(folder.bodyBytes));
-      final json = xml2json.toGData();
-      final nowPlayingResponse = json;
-      final NowPlaying nowPlaying = nowPlayingFromJson(nowPlayingResponse);
-      debugPrint(nowPlaying.toString());
+    if (pong.status == ResponseStatus.ok) {
+      saveCredentials(_username, _password, _server);
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Home(nowPlaying: nowPlaying)));
+          builder: (context) => Home(
+              subSonicContext:
+                  ctx))); //TODO: do not use Navigator in async method
     } else {
-      // If that call was not successful, throw an error.
-      throw Exception('Failed to load data');
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text('An error has occurred ${pong.status.name}'),
+            actions: [
+              ElevatedButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 }

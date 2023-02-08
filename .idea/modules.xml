@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/streamer.iml" filepath="$PROJECT_DIR$/streamer.iml" />
-      <module fileurl="file://$PROJECT_DIR$/android/streamer_android.iml" filepath="$PROJECT_DIR$/android/streamer_android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/streamer.iml" filepath="$PROJECT_DIR$/.idea/streamer.iml" />
     </modules>
   </component>
 </project>
