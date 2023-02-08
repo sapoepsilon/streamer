@@ -92,7 +92,7 @@ class _Login extends State<Login> {
           decoration: loginTextFieldBackground(),
           height: 60,
           child: TextField(
-            keyboardType: TextInputType.number,
+            keyboardType: TextInputType.text,
             onChanged: (value) {
               setState(() {
                 _server = value;
