@@ -45,9 +45,27 @@ class _Login extends State<Login> {
     }
   }
 
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.menu),
+        onPressed: () {
+          scaffoldKey.currentState?.openEndDrawer();
+        },
+        backgroundColor: Colors.transparent,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+      endDrawer: Drawer(backgroundColor: Color.fromARGB(100, 0, 0, 0),
+        child: ListView(children: [
+          DrawerHeader(
+              child: Image.network(
+                  "https://avatars.githubusercontent.com/u/108163041?s=96&v=4"))
+        ]),
+      ),
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
         child: GestureDetector(
@@ -65,7 +83,6 @@ class _Login extends State<Login> {
                   radius: .8,
                 )),
                 child: SingleChildScrollView(
-                  // physics: AlwaysScrollableScrollPhysics(),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 25, vertical: 120),
                   child: Column(
