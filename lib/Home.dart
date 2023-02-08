@@ -66,7 +66,7 @@ class _HomeState extends State<Home> {
           // SelectableText(
           //   "Artist: ${nowPlaying.subsonicResponse.nowPlaying.entry.artist.toString()}",
           //   style: TextStyle(fontSize: 20),
-          // ),
+        
           const SizedBox(
             height: 20,
           ),
