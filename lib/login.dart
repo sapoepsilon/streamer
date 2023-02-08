@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'dart:math';
-
 import 'package:crypto/crypto.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:streamer/Home.dart';
 import 'package:streamer/helpers/helpers.dart';
 import 'package:streamer/model/nowPlayingResponse.dart';
@@ -22,6 +23,27 @@ class _Login extends State<Login> {
   String _server = "";
   String _username = "";
   String _password = "";
+  bool isRemeberMe = false;
+  SharedPreferences? _prefs;
+
+  @override
+  void initState() {
+    loadPrefs();
+    super.initState();
+  }
+
+  loadPrefs() async {
+    _prefs = await SharedPreferences.getInstance();
+    if (_prefs!.getBool("check") == true) {
+      setState(() {
+        isRemeberMe = true;
+        _name = _prefs!.getString("_name")!;
+        _server = _prefs!.getString("_server")!;
+        _username = _prefs!.getString("_username")!;
+        _password = _prefs!.getString("_password")!;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +79,8 @@ class _Login extends State<Login> {
                             fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 130),
+                      rememberMe(),
+                      const SizedBox(height: 15),
                       server(),
                       const SizedBox(height: 20),
                       name(),
@@ -78,6 +102,41 @@ class _Login extends State<Login> {
     );
   }
 
+  Widget rememberMe() {
+    return Container(
+      height: 20,
+      child: Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
+        Theme(
+          data: ThemeData(
+            unselectedWidgetColor: Color.fromARGB(115, 0, 0, 0),
+          ),
+          child: Checkbox(
+            value: isRemeberMe,
+            checkColor: Colors.red,
+            activeColor: Color.fromARGB(115, 0, 0, 0),
+            onChanged: (value) {
+              setState(() {
+                isRemeberMe = value!;
+                _prefs!.setBool("check", value);
+                if (isRemeberMe) {
+                  _prefs!.setString("_name", _name);
+                  _prefs!.setString("_server", _server);
+                  _prefs!.setString("_username", _username);
+                  _prefs!.setString("_password", _password);
+                }
+              });
+            },
+          ),
+        ),
+        Text(
+          "Remember Me",
+          style: TextStyle(
+              color: Color.fromARGB(115, 0, 0, 0), fontWeight: FontWeight.bold),
+        ),
+      ]),
+    );
+  }
+
   Widget server() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +146,7 @@ class _Login extends State<Login> {
           decoration: loginTextFieldBackground(),
           height: 60,
           child: TextField(
-            keyboardType: TextInputType.number,
+            keyboardType: TextInputType.datetime,
             onChanged: (value) {
               setState(() {
                 _server = value;
@@ -196,14 +255,19 @@ class _Login extends State<Login> {
     String random = generateRandomString(7);
     String token = makeToken(_password, random);
 
+    print("Name: $_name");
+    print("Server: $_server");
+    print("Username: $_username");
+    print("Password: $_password");
+
     const id = 'ab';
 
     late final folder;
     try {
-       folder = await http.get(Uri.parse(
+      folder = await http.get(Uri.parse(
           'http://$_server/rest/getNowPlaying.view?u=$_username&t=$token&s=$random&v=1.61.0&c=streamer'));
     } catch (e) {
-        print("Error connecting: $e");
+      print("Error connecting: $e");
     }
 
     print("request: ${folder.request}");
