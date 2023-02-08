@@ -13,6 +13,7 @@ class Home extends StatefulWidget {
   const Home({Key? key, required this.subSonicContext}) : super(key: key);
   final subSonicContext;
 
+
   @override
   _HomeState createState() => _HomeState();
 }
@@ -63,17 +64,31 @@ class _HomeState extends State<Home> {
           SizedBox(
             height: 20,
           ),
-          // SelectableText(
-          //   "Artist: ${nowPlaying.subsonicResponse.nowPlaying.entry.artist.toString()}",
-          //   style: const TextStyle(fontSize: 20),
-          // ),
           SizedBox(
             height: 20,
           ),
-          // SelectableText(
-          //   "Artist: ${nowPlaying.subsonicResponse.nowPlaying.entry.title.toString()}",
-          //   style: const TextStyle(fontSize: 20),
-          // ),
+        children: [
+          const SizedBox(
+            height: 30,
+          ),
+          const Text(
+            "Now playing",
+            style: TextStyle(fontSize: 40),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          SelectableText(
+            "Artist: ${nowPlaying.subsonicResponse.nowPlaying.entry.artist.toString()}",
+            style: const TextStyle(fontSize: 20),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          SelectableText(
+            "Artist: ${nowPlaying.subsonicResponse.nowPlaying.entry.title.toString()}",
+            style: const TextStyle(fontSize: 20),
+          ),
         ],
       ),
     );
@@ -84,13 +99,13 @@ class _HomeState extends State<Home> {
     String token = makeToken("Faridonaka48@", random);
 
     const id = 'ab';
-
-    // final currentSong =
-    // 'http://localhost:4533/rest/stream.view?u=machinegun&t=$token&s=$random&v=1.61.0&c=streamer%id=${widget.nowPlaying.subsonicResponse.nowPlaying.entry.id.toString()}';
-    // Navigator.of(context).push(MaterialPageRoute(
-    //     builder: (context) => Player(
-    //           url: currentSong,
-    //           key: null,
-    //         )));
+// TODO: Use new API to play songs
+    final currentSong =
+    'http://localhost:4533/rest/stream.view?u=machinegun&t=$token&s=$random&v=1.61.0&c=streamer%id=${widget.nowPlaying.subsonicResponse.nowPlaying.entry.id.toString()}';
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => Player(
+              url: currentSong,
+              key: null,
+            )));
   }
 }
