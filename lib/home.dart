@@ -44,21 +44,21 @@ class _HomeState extends State<Home> {
         ),
       ),
       body: Column(
-        children: [
-          const SizedBox(
+        children: const [
+          SizedBox(
             height: 30,
           ),
-          const Text(
+          Text(
             "Now playing",
             style: TextStyle(fontSize: 40),
           ),
-          const SizedBox(
+          SizedBox(
             height: 20,
           ),
           // SelectableText(
           //   "Artist: ${nowPlaying.subsonicResponse.nowPlaying.entry.artist.toString()}",
           //   style: TextStyle(fontSize: 20),
-          const SizedBox(
+          SizedBox(
             height: 20,
           ),
           // SelectableText(
