@@ -43,7 +43,7 @@ class _HomeState extends State<Home> {
           ),
         ),
       ),
-      body: Column(
+      body: Column( // check if linter is working
         children: const [
           SizedBox(
             height: 30,
