@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_nullable_for_final_variable_declarations
+
 import 'dart:convert';
 import 'dart:developer';
 
@@ -5,7 +7,6 @@ import 'package:streamer/subsonic/requests/get_starred2.dart';
 import 'package:streamer/subsonic/requests/stream_id.dart';
 import 'package:streamer/utils/duration.dart';
 
-import '../base_request.dart';
 import '../subsonic.dart';
 import 'get_cover_art.dart';
 
@@ -51,6 +52,7 @@ class SongResult {
   final String albumName;
   final String albumId;
   final String coverArtId;
+  // ignore: todo
   // TODO: convert to Uri?
   final String coverArtLink;
   final int year;
