@@ -113,7 +113,7 @@ class _Login extends State<Login> {
             onChanged: (value) {
               setState(() {
                 _password = value;
-              }); // checks still not runnning 
+              }); // checks still not runnning  // should work now
             },
             style: const TextStyle(color: Colors.white),
             decoration: loginTextDecoration("Password"),
