@@ -45,20 +45,20 @@ class _HomeState extends State<Home> {
       ),
       body: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
-          Text(
+          const Text(
             "Now playing",
             style: TextStyle(fontSize: 40),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           // SelectableText(
           //   "Artist: ${nowPlaying.subsonicResponse.nowPlaying.entry.artist.toString()}",
           //   style: TextStyle(fontSize: 20),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           // SelectableText(
