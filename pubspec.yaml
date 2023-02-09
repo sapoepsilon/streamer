@@ -40,7 +40,8 @@ dependencies:
   xml2json: ^5.3.6
   http: ^0.13.5
   just_audio: ^0.9.31
-  audioplayer: ^0.8.1
+  audio_service: ^0.18.9
+  shared_preferences: ^2.0.17
 
 dev_dependencies:
   flutter_test:
