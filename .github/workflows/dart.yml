@@ -3,7 +3,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Dart
+name: Dart checker, and Discord notifier
 
 on:
   push:
@@ -48,3 +48,19 @@ jobs:
       # Add tests check once we start implementing tests
       # - name: Run tests
         # run: dart test
+
+      - name: Discord Build Notification
+        env:
+            DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        if: ${{ success() }}
+        uses: Ilshidur/action-discord@0.3.2
+        with:
+            args: '✅ Successfully built `${{ github.repository }}` on ${{ github.ref_type }}: `${{ github.ref_name }}` (author: ${{github.event.commits[0].author.name}})'
+
+      - name: Discord Build Failure Notification
+        env:
+            DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        if: ${{ failure() }}
+        uses: Ilshidur/action-discord@0.3.2
+        with:
+            args: '❗️ Build failed for `${{ github.repository }}` on ${{ github.ref_type }}: `${{ github.ref_name }}`'
