@@ -115,7 +115,6 @@ class _Login extends State<Login> {
         savedCredentiais.forEach((key, value) {
           if (key == "username") {
             _username = value;
-            print("Username: $_username");
           } else if (key == "password") {
             _password = value;
           } else if (key == "server") {
@@ -158,6 +157,7 @@ class _Login extends State<Login> {
               subSonicContext:
                   // ignore: todo
                   ctx),
+          // ignore: todo
           context: context)); //TODO: do not use Navigator in async method
     } else {
       // ignore: use_build_context_synchronously
@@ -192,7 +192,6 @@ class _Login extends State<Login> {
   Widget field(bool isTablet, Size screenSize, String userValue, hintText,
       Function function,
       [bool? isPassword]) {
-    debugPrint("field: $userValue");
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
