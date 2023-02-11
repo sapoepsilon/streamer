@@ -1,9 +1,11 @@
-name: Build
+name: Discord message
 on:
     push:
         branches:
             - develop
             - main
+    pull_request:
+      branches: [ "main" ]
 jobs:
     build:
         runs-on: ubuntu-latest
