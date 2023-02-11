@@ -70,7 +70,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-//   Future<void> _playNowPlaying() async {
+//   Future<void> _playNowPlaying() async { // Check discord messager
 //     String random = generateRandomString(7);
 //     String token = makeToken("Faridonaka48@", random);
 
