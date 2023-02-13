@@ -36,3 +36,23 @@ String generateRandomString(int len) {
   return String.fromCharCodes(
       List.generate(len, (index) => r.nextInt(33) + 89));
 }
+
+Future showErrorDialog(BuildContext context, String errorMessage) {
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Error'),
+        content: Text('An error has occurred $errorMessage'),
+        actions: [
+          ElevatedButton(
+            child: const Text('OK'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}

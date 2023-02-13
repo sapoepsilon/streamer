@@ -19,6 +19,8 @@ bool? parseBool(dynamic val) {
     return val;
   } else if (val is String) {
     return "true" == val.toLowerCase();
+  } else {
+    return null;
   }
 }
 

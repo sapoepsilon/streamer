@@ -1,20 +1,16 @@
-import 'dart:convert';
-import 'dart:math';
+// ignore_for_file: library_private_types_in_public_api
 
-import 'package:crypto/crypto.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:streamer/Home.dart';
+import 'package:streamer/home.dart';
+
 import 'package:streamer/helpers/helpers.dart';
 import 'package:streamer/subsonic/context.dart';
-import 'package:streamer/subsonic/requests/get_artists.dart';
 import 'package:streamer/subsonic/requests/ping.dart';
 import 'package:streamer/subsonic/response.dart';
-import 'package:streamer/utils/SharedPreferences.dart';
-
-import 'package:xml2json/xml2json.dart';
+import 'package:streamer/utils/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -98,7 +94,7 @@ class _Login extends State<Login> {
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -240,7 +236,7 @@ class _Login extends State<Login> {
       child: ElevatedButton(
         onPressed: _connectToServer,
         style: ElevatedButton.styleFrom(
-            minimumSize: Size(80, 60),
+            minimumSize: const Size(80, 60),
             backgroundColor: Colors.purple.shade900,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(45))),
@@ -257,8 +253,7 @@ class _Login extends State<Login> {
   }
 
   void _connectToServer() async {
-    String random = generateRandomString(7);
-    String token = makeToken(_password, random);
+    // ignore: unused_local_variable
     String errorMessage = "";
     final ctx = SubsonicContext(
         serverId: "Docker",
@@ -266,7 +261,6 @@ class _Login extends State<Login> {
         endpoint: Uri.parse(_server),
         user: _username,
         pass: _password);
-
 
     var pong = await Ping().run(ctx).catchError((err) {
       debugPrint('error: network issue? $err');
@@ -280,28 +274,17 @@ class _Login extends State<Login> {
 
     if (pong.status == ResponseStatus.ok) {
       saveCredentials(_username, _password, _server);
+      // ignore: todo
+      // TODO: move methods with context out of Async method
+      // ignore: use_build_context_synchronously
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => Home(
               subSonicContext:
+                  // ignore: todo
                   ctx))); //TODO: do not use Navigator in async method
     } else {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Error'),
-            content: Text('An error has occurred ${pong.status.name}'),
-            actions: [
-              ElevatedButton(
-                child: Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
+      // ignore: use_build_context_synchronously
+      showErrorDialog(context, errorMessage);
     }
   }
 }

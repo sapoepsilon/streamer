@@ -5,7 +5,6 @@ import 'package:streamer/subsonic/requests/get_artist.dart';
 import 'package:streamer/subsonic/requests/get_cover_art.dart';
 import 'package:streamer/utils/duration.dart';
 
-import '../base_request.dart';
 import '../subsonic.dart';
 
 class GetStarred2Result {
