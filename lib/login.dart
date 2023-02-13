@@ -21,10 +21,53 @@ class _Login extends State<Login> {
   String _server = "";
   String _username = "";
   String _password = "";
+  bool isRemeberMe = false;
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.menu),
+        onPressed: () {
+          scaffoldKey.currentState?.openEndDrawer();
+        },
+        backgroundColor: Colors.transparent,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+      endDrawer: Drawer(
+        backgroundColor: Color.fromARGB(156, 0, 0, 0),
+        child: Column(
+            // I was thinking of using a listview.builder just in case the user have more servers.
+            children: [
+              DrawerHeader(
+                child: Image.asset("assets/pato2.png"),
+              ),
+              Container(
+                height: 60,
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, "/Sonds_List");
+                  },
+                  style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(80, 60),
+                      backgroundColor: Color.fromARGB(255, 20, 122, 140),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(45))),
+                  child: const Text(
+                    "Songs List -- Change Later",
+                    style: TextStyle(
+                      color: Color.fromARGB(222, 24, 167, 214),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              )
+            ]),
+      ),
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
         child: GestureDetector(
@@ -56,6 +99,8 @@ class _Login extends State<Login> {
                             fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 130),
+                      rememberMe(),
+                      const SizedBox(height: 15),
                       server(),
                       const SizedBox(height: 20),
                       name(),
@@ -74,6 +119,35 @@ class _Login extends State<Login> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget rememberMe() {
+    return Container(
+      height: 20,
+      child: Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
+        Theme(
+          data: ThemeData(
+            unselectedWidgetColor: Color.fromARGB(255, 65, 137, 185),
+          ),
+          child: Checkbox(
+            value: isRemeberMe,
+            checkColor: Colors.red,
+            activeColor: Color.fromARGB(255, 65, 137, 185),
+            onChanged: (value) {
+              setState(() {
+                isRemeberMe = value!;
+              });
+            },
+          ),
+        ),
+        Text(
+          "Remember Me",
+          style: TextStyle(
+              color: Color.fromARGB(255, 65, 137, 185),
+              fontWeight: FontWeight.bold),
+        ),
+      ]),
     );
   }
 
