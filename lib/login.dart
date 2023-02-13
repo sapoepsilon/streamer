@@ -15,6 +15,8 @@ import 'package:streamer/utils/SharedPreferences.dart';
 
 import 'package:xml2json/xml2json.dart';
 
+import 'Playlist.dart';
+
 class Login extends StatefulWidget {
   const Login({super.key});
 
@@ -222,9 +224,7 @@ class _Login extends State<Login> {
     if (pong.status == ResponseStatus.ok) {
       saveCredentials(_username, _password, _server);
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Home(
-              subSonicContext:
-                  ctx))); //TODO: do not use Navigator in async method
+          builder: (context) => PlaylistList(ctx: ctx))); //TODO: do not use Navigator in async method
     } else {
       showDialog(
         context: context,
@@ -236,7 +236,7 @@ class _Login extends State<Login> {
               ElevatedButton(
                 child: Text('OK'),
                 onPressed: () {
-                  Navigator.of(context).pop();
+               
                 },
               ),
             ],
