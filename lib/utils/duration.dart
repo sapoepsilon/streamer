@@ -6,7 +6,7 @@ Duration getDuration(dynamic durationParam) {
     return Duration(seconds: durationParam);
   }
 
-  return Duration(seconds: 0);
+  return const Duration(seconds: 0);
 }
 
 String formatDuration(Duration duration) {
