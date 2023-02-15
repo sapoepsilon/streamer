@@ -6,6 +6,7 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:streamer/helpers/globals.dart';
 import 'package:streamer/home.dart';
 import 'package:streamer/helpers/helpers.dart';
+import 'package:streamer/pages/Songs_List.dart';
 import 'package:streamer/subsonic/context.dart';
 import 'package:streamer/subsonic/requests/ping.dart';
 import 'package:streamer/subsonic/response.dart';
@@ -153,10 +154,7 @@ class _Login extends State<Login> {
       // TODO: move methods with context out of Async method
       // ignore: use_build_context_synchronously
       Navigator.of(context).push(platformPageRoute(
-          builder: (context) => Home(
-              subSonicContext:
-                  // ignore: todo
-                  ctx),
+          builder: (context) => SongsList(subSonicContext: ctx),
           // ignore: todo
           context: context)); //TODO: do not use Navigator in async method
     } else {

@@ -2,14 +2,15 @@
 
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:just_audio/just_audio.dart';
 
 class Player extends StatefulWidget {
   final String url;
 
-  const Player({Key? key, required this.url})
-      : super(key: key);
+  const Player({Key? key, required this.url}) : super(key: key);
 
   @override
   _Player createState() => _Player();
@@ -17,7 +18,7 @@ class Player extends StatefulWidget {
 
 class _Player extends State<Player> {
   late AudioPlayer _audioPlayer;
-  final bool _isPlaying = false;
+  bool _isPlaying = false;
   late ScrollController _scrollController;
 
   @override
@@ -28,9 +29,9 @@ class _Player extends State<Player> {
   }
 
   void _play() async {
-    log("url: ${widget.url}");
-
+    await _audioPlayer.setUrl(widget.url);
     try {
+      setState(() {});
       await _audioPlayer.play();
     } catch (e) {
       log("error while playing: $e");
@@ -38,35 +39,52 @@ class _Player extends State<Player> {
   }
 
   void _pause() async {
-  await _audioPlayer.pause();
+    await _audioPlayer.pause();
   }
-
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Music Player'),
-      ),
-      body: SingleChildScrollView(
-        controller: _scrollController,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              _isPlaying
-                  ? IconButton(
-                      icon: const Icon(Icons.pause),
-                      onPressed: _pause,
-                    )
-                  : IconButton(
-                      icon: const Icon(Icons.play_arrow),
-                      onPressed: _play,
-                    ),
-            ],
-          ),
-        ),
-      ),
+    return PlatformAppBar(
+      title: const Text('Music Player'),
+      cupertino: (context, platform) {
+        return CupertinoNavigationBarData(
+            leading: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            _isPlaying
+                ? PlatformElevatedButton(
+                    child: const Icon(CupertinoIcons.pause),
+                    onPressed: _pause,
+                  )
+                : PlatformElevatedButton(
+                    child: const Icon(CupertinoIcons.play),
+                    onPressed: _play,
+                  ),
+          ],
+        ));
+      },
+      material: (context, platform) {
+        return MaterialAppBarData(
+            leading: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            _isPlaying
+                ? IconButton(
+                    icon: const Icon(Icons.pause),
+                    onPressed: (() {
+                      _isPlaying = !_isPlaying;
+                      _pause();
+                    }),
+                  )
+                : IconButton(
+                    icon: const Icon(Icons.play_arrow),
+                    onPressed: (() {
+                      _isPlaying = !_isPlaying;
+                      _play();
+                    })),
+          ],
+        ));
+      },
     );
   }
 }

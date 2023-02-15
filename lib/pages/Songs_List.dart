@@ -1,11 +1,20 @@
+// ignore_for_file: invalid_return_type_for_catch_error
+
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:streamer/helpers/helpers.dart';
+import 'package:streamer/player.dart';
+import 'package:streamer/subsonic/context.dart';
+import 'package:streamer/subsonic/requests/get_album.dart';
+import 'package:streamer/subsonic/requests/requests.dart';
+import 'package:streamer/subsonic/requests/stream_id.dart';
+import 'package:streamer/subsonic/response.dart';
+import 'package:streamer/subsonic/subsonic.dart';
 
 class SongsList extends StatefulWidget {
-  const SongsList({super.key});
+  const SongsList({super.key, required this.subSonicContext});
+  final subSonicContext;
 
   @override
   State<SongsList> createState() => _SongsList();
@@ -13,16 +22,74 @@ class SongsList extends StatefulWidget {
 
 class _SongsList extends State<SongsList> {
   final AudioPlayer _player = AudioPlayer();
+  List<SongResult> songList = [];
 
   @override
   void initState() {
     super.initState();
+    _fetchAllSongs();
+  }
+
+  Future<void> _fetchAllSongs() async {
+    final albumList =
+        await GetAlbumList2(type: GetAlbumListType.alphabeticalByArtist)
+            .run(widget.subSonicContext)
+            .catchError((err) {
+      debugPrint('error: network issue? $err');
+      // errorMessage = err.toString();
+      return Future.value(SubsonicResponse(
+        ResponseStatus.failed,
+        "Network issue",
+        '',
+      ));
+    });
+
+    if (albumList.status == ResponseStatus.ok) {
+      for (var album in albumList.data) {
+        final fetchedAlbum = await GetAlbum(album.id)
+            .run(widget.subSonicContext)
+            .catchError((err) {
+          debugPrint('error: network issue? $err');
+          // errorMessage = err.toString();
+          return Future.value(SubsonicResponse(
+            ResponseStatus.failed,
+            "Network issue",
+            '',
+          ));
+        });
+
+        if (fetchedAlbum.status == ResponseStatus.ok) {
+          for (var song in fetchedAlbum.data.songs) {
+            setState(() {
+              songList.add(song);
+            });
+          }
+        }
+      }
+    }
+
+    songList.sort();
+    for (var song in songList) {
+      debugPrint("song: ${song.artistName}");
+    }
+    setState(() {});
+  }
+
+  Future<void> _playNowPlaying(String songID) async {
+
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => Player(
+              url: songID,
+              key: null,
+            ),),);
   }
 
   @override
   Widget build(BuildContext context) {
     final double HeightS = MediaQuery.of(context).size.height;
     final double WidthS = MediaQuery.of(context).size.width;
+    final player = AudioPlayer();
+
     return Scaffold(
         bottomNavigationBar: BottomNavigationBar(
             elevation: 0.0,
@@ -30,7 +97,7 @@ class _SongsList extends State<SongsList> {
             unselectedItemColor: Color.fromARGB(255, 137, 11, 11),
             selectedItemColor: Colors.green[700],
             currentIndex: 2,
-            items: [
+            items: const [
               BottomNavigationBarItem(
                 icon: Icon(Icons.home_filled),
                 label: "Home",
@@ -46,7 +113,7 @@ class _SongsList extends State<SongsList> {
         appBar: AppBar(
           backgroundColor: Colors.black87,
           elevation: 0.0,
-          title: Text(
+          title: const Text(
             "Your Songs (draft)",
           ),
         ),
@@ -58,17 +125,11 @@ class _SongsList extends State<SongsList> {
             if (item.hasData) {
               Map? jsonMap = json.decode(item.data!);
               // List? songs = jsonMap?.keys.toList();
-              List? songs = jsonMap?.keys
-                  .where((element) => element.endsWith(".mp3"))
-                  .toList();
 
               return ListView.builder(
-                itemCount: songs?.length,
+                itemCount: songList.length,
                 itemBuilder: (context, index) {
-                  var path = songs![index].toString();
-                  var title = path.split("/").last.toString();
-                  title = title.replaceAll("%20", "");
-                  title = title.split(".").first;
+                  var title = songList[index].artistName;
 
                   return Container(
                     margin: const EdgeInsets.only(
@@ -106,26 +167,25 @@ class _SongsList extends State<SongsList> {
                       title: Text(
                         title,
                       ),
-                      subtitle:
-                          Text("path: ${path.substring(13, path.length - 4)}",
-                              style: const TextStyle(
-                                color: Colors.white70,
-                                fontSize: 12.0,
-                              )),
+                      // subtitle:
+                      // Text("path: ${path.substring(13, path.length - 4)}",
+                      //     style: const TextStyle(
+                      //       color: Colors.white70,
+                      //       fontSize: 12.0,
+                      //     )),
                       leading: Image.asset(
                         "assets/pato2.png",
                       ),
                       onTap: () async {
-                        final snackBar = SnackBar(
-                          content: Text(title),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        // await player.setSourceAsset(path.substring(13));
-                        // await player.play(
-                        //     AssetSource("${(songs[index]).substring(13)}"));
-                        // print((songs[index]).substring(13));
-                        await _player.setAsset(path);
-                        await _player.play();
+                        // await player.pause();
+                        final streamURL = StreamItem(
+                                songList[index].id.toString(),
+                                streamFormat: StreamFormat.mp3)
+                            .getDownloadUrl(widget.subSonicContext);
+
+                        debugPrint("stream url: $streamURL");
+
+                        _playNowPlaying(streamURL);
                       },
                     ),
                   );
