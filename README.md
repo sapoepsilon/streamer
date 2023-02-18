@@ -35,8 +35,8 @@ flutter doctor
 ✅ Xcode - develop for iOS and macOS <br />
 ✅ Chrome - develop for the web<br />
 ✅ Android Studio (version 2022.1)<br />
-✅ IntelliJ IDEA Ultimate Edition (version 2022.3.1)<br />
-✅ VS Code (version 1.75.1)<br />
+✅ IntelliJ IDEA Ultimate Edition (optional)<br />
+✅ VS Code (optional)<br />
 ✅ HTTP Host Availability<br />
 
 Clone the repository<br />
