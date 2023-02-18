@@ -11,8 +11,7 @@ This project is a Flutter application that can be integrated with Figma and VSCo
 * [🐚 Unix Shell](https://github.com/sapoepsilon/streamer/#unix-shell)<br />
 * Download - coming soon...<br />
 
-Join our Discord <a href=”https://www.google.com/"><img align=”left” src=”https://raw.githubusercontent.com/sapoepsilon/streamer/main/.git/readme/discord_icom.png" alt="Join our discord” width=”21px”/></a>
-
+Join our Discord <a href="https://www.google.com/"><img src="https://raw.githubusercontent.com/sapoepsilon/streamer/main/lib/readme/discord_icon.png" alt="Join our discord" width="21px"/></a>
 ## Prerequisites
 * [Source Control](https://github.com/sapoepsilon/streamer#source-control)
 * [Flutter SDK](https://docs.flutter.dev/get-started/install) <br />
