@@ -1,4 +1,5 @@
-# streamer
+# streamer  <a href="https://discord.gg/AschPdpaCb"><img src="https://raw.githubusercontent.com/sapoepsilon/streamer/main/lib/readme/discord_icon.png" alt="Join our discord" width="21px"></a>
+
 This music player app, built with Flutter and designed with unique user interfaces for both Android and iOS, allows you to stream your entire music library using a Subsonic server. With its intuitive design and easy-to-use features, you can enjoy your music seamlessly on any device. The app is also fully compatible with Navidrome, so you can easily access your library and create playlists on the go.
 <img width="851" alt="image" src="https://user-images.githubusercontent.com/47342870/211945081-9ae95fd4-35bd-486a-9d85-8cd4f4c362aa.png">
 
@@ -10,7 +11,7 @@ This project is a Flutter application that can be integrated with Figma and VSCo
 * [🍃 Flutter SDK](https://docs.flutter.dev/get-started/install) <br />
 * [🐚 Unix Shell](https://github.com/sapoepsilon/streamer/#unix-shell)<br />
 * Download - coming soon...<br />
- <a href="https://discord.gg/AschPdpaCb"> Join our Discord<img src="https://raw.githubusercontent.com/sapoepsilon/streamer/main/lib/readme/discord_icon.png" alt="Join our discord" width="21px"/></a><br />
+
 ## Prerequisites
 * [Source Control](https://github.com/sapoepsilon/streamer#source-control)
 * [Flutter SDK](https://docs.flutter.dev/get-started/install) <br />
@@ -57,6 +58,8 @@ flutter run
 ### Authors
 [sapooepsilon](https://github.com/sapoepsilon)<br />
 [dereckAn](https://github.com/dereckAn)<br />
+
+## Unix style shell
 On macOS, the Unix shell is already installed by default. You can access it through the Terminal application, which can be found in the "Utilities" folder within the "Applications" 
 folder.
 
