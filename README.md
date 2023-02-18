@@ -1,15 +1,17 @@
 # streamer
-Yet another subsonic client
-
+This music player app, built with Flutter and designed with unique user interfaces for both Android and iOS, allows you to stream your entire music library using a Subsonic server. With its intuitive design and easy-to-use features, you can enjoy your music seamlessly on any device. The app is also fully compatible with Navidrome, so you can easily access your library and create playlists on the go.
 <img width="851" alt="image" src="https://user-images.githubusercontent.com/47342870/211945081-9ae95fd4-35bd-486a-9d85-8cd4f4c362aa.png">
 
 
 This project is a Flutter application that can be integrated with Figma and VSCode.
 
-## Getting Started
+* [⚙️ Building locally](https://github.com/sapoepsilon/streamer#installation)
+* [⬇️ Prerequisites](https://github.com/sapoepsilon/streamer#prerequisites)
+* [🍃 Flutter SDK](https://docs.flutter.dev/get-started/install) <br />
+* [🐚 Unix Shell](https://github.com/sapoepsilon/streamer/#unix-shell)<br />
+* Download - coming soon...<br />
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
-[Join our teams channel](https://teams.microsoft.com/l/team/19%3a6yObTI8Wffsk6MSA_0HydZOZE7k-0EJMT58PbZJcAsg1%40thread.tacv2/conversations?groupId=53fe00c0-3a9a-49d9-9093-e20845cdce1d&tenantId=5a57404a-b412-4229-8d67-303fda6c124b)
+Join our Discord <a href=”https://www.google.com/"><img align=”left” src=”https://raw.githubusercontent.com/sapoepsilon/streamer/main/.git/readme/discord_icom.png" alt="Join our discord” width=”21px”/></a>
 
 ## Prerequisites
 * [Source Control](https://github.com/sapoepsilon/streamer#source-control)
@@ -17,17 +19,31 @@ These instructions will get you a copy of the project up and running on your loc
 * [Unix Shell](https://github.com/sapoepsilon/streamer/#unix-shell)<br />
 * [VSCode](https://code.visualstudio.com/) (or [Android Studio](https://developer.android.com/studio))<br />
 * A running [Subsonic server](http://www.subsonic.org/pages/index.jsp) (can be self-hosted or accessed via a remote server)<br />
-* Subsonic API credentials (username and password)<br />
-* [Teams](https://www.microsoft.com/en-us/microsoft-teams/download-app)
 * [Figma](httos://www.figma.com/)
+
+# Installation
+
+Make sure that preruquistes have been met. Run in terminal:
+
+```
+flutter doctor
+```
+
+
+### Example output: <br />
+>✅ Flutter (Channel stable)<br />
+✅ Android toolchain - develop for Android devices <br />
+✅ Xcode - develop for iOS and macOS <br />
+✅ Chrome - develop for the web<br />
+✅ Android Studio (version 2022.1)<br />
+✅ IntelliJ IDEA Ultimate Edition (version 2022.3.1)<br />
+✅ VS Code (version 1.75.1)<br />
+✅ HTTP Host Availability<br />
 
 Clone the repository<br />
 ```
 git clone https://github.com/sapoepsilon/Streamer.git
 ```
-
-
-Get your Figma API key from Figma API website and add it to the project
 Open the project in VSCode
 Install the required packages by running
 ```
@@ -35,20 +51,14 @@ flutter packages get
 ```
 
 Run the project on an emulator or device by pressing F5 or using the command
-Copy code
 ```
 flutter run
 ```
 
-Built With
-
-[Flutter](https://flutter.dev/) - The mobile app development framework<br />
-[Figma](https://www.figma.com/) - Design tool used for UI/UX design<br />
-[VSCode](https://code.visualstudio.com/download) - Code editor used for development<br />
 
 ### Authors
-[sapooepsilon](https://github.com/sapoepsilon)
-## Unix shell
+[sapooepsilon](https://github.com/sapoepsilon)<br />
+[dereckAn](https://github.com/dereckAn)<br />
 On macOS, the Unix shell is already installed by default. You can access it through the Terminal application, which can be found in the "Utilities" folder within the "Applications" 
 folder.
 
