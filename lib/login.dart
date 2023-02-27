@@ -24,7 +24,7 @@ class _Login extends State<Login> {
   String _server = "";
   String _username = "";
   String _password = "";
-  bool isRemeberMe = false;
+  bool shouldSaveCredentials = false;
 
   @override
   void initState() {
@@ -263,12 +263,12 @@ class _Login extends State<Login> {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         PlatformSwitch(
-          value: isRemeberMe,
+          value: shouldSaveCredentials,
           onChanged: (value) {
             setState(() {
-              isRemeberMe = value;
-              saveUser(isLoggedInKey, isRemeberMe);
-              if (isRemeberMe) {
+              shouldSaveCredentials = value;
+              saveUser(isLoggedInKey, shouldSaveCredentials);
+              if (shouldSaveCredentials) {
                 saveCredentials(
                   _server,
                   _username,

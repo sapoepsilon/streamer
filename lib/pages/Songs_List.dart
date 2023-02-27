@@ -119,6 +119,7 @@ class _SongsList extends State<SongsList> {
     }
 
     songList.sort();
+    print("songlist length: ${songList.length}");
     setState(() {});
     return songList;
   }
