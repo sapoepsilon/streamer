@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:streamer/subsonic/context.dart';
 import 'package:streamer/subsonic/requests/get_playlist.dart';
 import 'package:streamer/subsonic/requests/get_playlists.dart';
@@ -57,21 +56,19 @@ class _PlaylistListState extends State<PlaylistList> {
         style: TextStyle(
             fontSize: 25.0,
             fontWeight: FontWeight.bold,
-            color: Colors.black45),
+            color: Colors.white70),
       ),
       ),),
       body: Container(
+        height: double.infinity,
+        width: double.infinity,
         decoration: const BoxDecoration(
-          gradient: LinearGradient(
+          gradient: RadialGradient(
             colors: [
-              Color(0xFF701ebd),
-              Color(0xFF873bcc),
-              Color(0xFFfe4a97),
-              Color(0xFFe17763),
-              Color(0xFF68998c),
+              Colors.teal,
+              Colors.black,
             ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+            radius: .8,
           ),
         ),
 
@@ -79,20 +76,32 @@ class _PlaylistListState extends State<PlaylistList> {
           ? loading()
           : ListView.builder(
           itemCount: playlistList.length,
-          itemBuilder: (BuildContext context, int index) {
+          itemBuilder: (BuildContext context, int index ) {
             return ListTile(
-                leading: const Icon(Icons.list),
                 trailing:  Text(
-                  "My Playlist $index",
-                  style: const TextStyle(color: Colors.green, fontSize: 15),
+                  "My Playlist ($index)",
+                  style: const TextStyle(color: Colors.white70, fontSize: 13),
                 ),
                 title: Text(
                   playlistList[index].name,
                   style: const TextStyle(
                       fontSize: 25.0,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black45),
+                      height: 2.5,
+                      color: Colors.white70),
                 ),
+              leading: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  minWidth: 44,
+                  minHeight: 44,
+                  maxWidth: 64,
+                  maxHeight: 64,
+                ),
+                child: Image.asset(
+                  "images/Cover2.jpg",
+                  scale: 0.9,
+                ),
+            ),
             );
           }),
     ),
