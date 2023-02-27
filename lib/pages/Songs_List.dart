@@ -1,13 +1,10 @@
-// ignore_for_file: invalid_return_type_for_catch_error
+// ignore_for_file: invalid_return_type_for_catch_error, prefer_typing_uninitialized_variables, unused_field
 
-import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:streamer/helpers/helpers.dart';
 import 'package:streamer/player.dart';
-import 'package:streamer/subsonic/context.dart';
 import 'package:streamer/subsonic/requests/download.dart';
 import 'package:streamer/subsonic/requests/get_album.dart';
 import 'package:streamer/subsonic/requests/requests.dart';
@@ -119,7 +116,6 @@ class _SongsList extends State<SongsList> {
     }
 
     songList.sort();
-    print("songlist length: ${songList.length}");
     setState(() {});
     return songList;
   }
@@ -141,29 +137,44 @@ class _SongsList extends State<SongsList> {
 
   BottomAppBar _buildBottomNavigationBar() {
     return BottomAppBar(
-      color: const Color.fromRGBO(0,0,0,0.5),
+      color: const Color.fromRGBO(0, 0, 0, 0.5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.home_outlined, color: Colors.white, size: 40,),
+            icon: const Icon(
+              Icons.home_outlined,
+              color: Colors.white,
+              size: 40,
+            ),
             //color: Colors.black,
           ),
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.search_outlined, color: Colors.white, size: 40,),
-            color:  Colors.white,
-
+            icon: const Icon(
+              Icons.search_outlined,
+              color: Colors.white,
+              size: 40,
+            ),
+            color: Colors.white,
           ),
           IconButton(
             onPressed: () {},
-            icon: Icon(isCupertino(context) ? CupertinoIcons.heart : Icons.hearing_sharp, color: Colors.white, size: 40,),
+            icon: Icon(
+              isCupertino(context) ? CupertinoIcons.heart : Icons.hearing_sharp,
+              color: Colors.white,
+              size: 40,
+            ),
             color: Colors.black,
           ),
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.person_outlined, color: Colors.white, size: 40,),
+            icon: const Icon(
+              Icons.person_outlined,
+              color: Colors.white,
+              size: 40,
+            ),
             color: Colors.black,
           ),
         ],
@@ -173,10 +184,6 @@ class _SongsList extends State<SongsList> {
 
   @override
   Widget build(BuildContext context) {
-    final double HeightS = MediaQuery.of(context).size.height;
-    final double WidthS = MediaQuery.of(context).size.width;
-    final player = AudioPlayer();
-
     return Scaffold(
       extendBody: true,
       bottomNavigationBar: _buildBottomNavigationBar(),
@@ -253,7 +260,7 @@ class _SongsList extends State<SongsList> {
                     ),
                   ],
                 ),
-                textColor: Color.fromARGB(204, 11, 170, 14),
+                textColor: const Color.fromARGB(204, 11, 170, 14),
                 title: Text(
                   title,
                   style: const TextStyle(overflow: TextOverflow.ellipsis),

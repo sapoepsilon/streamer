@@ -1,11 +1,9 @@
-// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, unused_field
 
 import 'dart:async';
 import 'dart:developer';
-import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:just_audio/just_audio.dart';
@@ -77,9 +75,6 @@ class _Player extends State<Player> {
     if (songURL != "") {
       isAlbumArtLoading = false;
     }
-    print("song mbid: $mbid");
-    print("song URL: $songURL");
-    print("boolean to change the animation: $isAlbumArtLoading");
     if (songURL == "") {
       return const Icon(
         Icons.question_mark_outlined,
@@ -112,12 +107,6 @@ class _Player extends State<Player> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = SiriWaveController(
-      amplitude: 0.5,
-      color: Colors.transparent,
-      frequency: 4,
-      speed: 1,
-    );
     return PlatformScaffold(
       appBar: PlatformAppBar(
         backgroundColor: Colors.transparent,
@@ -177,15 +166,15 @@ class _Player extends State<Player> {
                     Duration progress = snapshot.data ?? const Duration();
                     return PlatformSlider(
                       activeColor: Colors.purple,
-                      value: progress.inMilliseconds?.toDouble() ?? 0.0,
+                      value: progress.inMilliseconds.toDouble(),
                       onChangeEnd: (double value) {
                         _audioPlayer
                             .seek(Duration(milliseconds: value.toInt()));
                       },
                       min: 0.0,
-                      max: _audioPlayer.duration?.inMilliseconds?.toDouble() ??
+                      max: _audioPlayer.duration?.inMilliseconds.toDouble() ??
                           3.0,
-                      onChanged: (double) {},
+                      onChanged: (value) {},
                     );
                   },
                 ),
