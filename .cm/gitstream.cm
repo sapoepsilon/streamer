@@ -29,6 +29,24 @@ automations:
       - action: add-reviewers@v1
         args:
           reviewers: {{ repo | rankByGitBlame(gt=25) | random }}
+  senior_review:
+    if:
+      - {{ files | match(term='lib/subsonic') | some }}
+    run:
+      - action: add-comment@v1
+        args:
+          comment: |
+            Subsonic api update
+            (Updates API)
+
+  senior_review:
+    if:
+      - {{ files | match(term='lib/') }}
+    run:
+      - action: add-reviewers@v1
+        args:
+          reviewers: [sapoepsilon, DereckAn]
+
 calc:
   etr: {{ branch | estimatedReviewTime }}
 is:

@@ -20,3 +20,15 @@ Future<Map<String, String>> getCredentials() async {
     "server": server ?? "noServer"
   };
 }
+
+// save boolean
+void saveUser(String key, bool value) async {
+  final prefs = await SharedPreferences.getInstance();
+  prefs.setBool(key, value);
+}
+
+// retrieve boolean
+Future<bool> getBool(String key) async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getBool(key) ?? false;
+}
