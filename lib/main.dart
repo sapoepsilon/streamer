@@ -1,8 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:just_audio_background/just_audio_background.dart';
+import 'package:streamer/utils/service_locator.dart';
+import 'audio_handler.dart';
 import 'login.dart';
 
-
-void main() {
+void main()  {
   runApp(const MyApp());
 }
 
@@ -11,10 +15,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: "Login",
-      debugShowCheckedModeBanner: false,
-      home: Login(),
+    return PlatformProvider(
+      builder: (context) => PlatformApp(
+        cupertino: (context, platform) {
+          return CupertinoAppData(
+            theme: const CupertinoThemeData(
+              textTheme: CupertinoTextThemeData(),
+            ),
+          );
+        },
+        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+          DefaultMaterialLocalizations.delegate,
+          DefaultWidgetsLocalizations.delegate,
+          DefaultCupertinoLocalizations.delegate,
+        ],
+        title: 'Flutter Platform Widgets',
+        home: const Login(),
+      ),
     );
   }
 }
