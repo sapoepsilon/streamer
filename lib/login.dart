@@ -6,6 +6,7 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:streamer/helpers/globals.dart';
 import 'package:streamer/home.dart';
 import 'package:streamer/helpers/helpers.dart';
+import 'package:streamer/pages/Songs_List.dart';
 import 'package:streamer/subsonic/context.dart';
 import 'package:streamer/subsonic/requests/ping.dart';
 import 'package:streamer/subsonic/response.dart';
@@ -25,7 +26,7 @@ class _Login extends State<Login> {
   String _server = "";
   String _username = "";
   String _password = "";
-  bool isRemeberMe = false;
+  bool shouldSaveCredentials = false;
 
   @override
   void initState() {
@@ -155,7 +156,7 @@ class _Login extends State<Login> {
       // TODO: move methods with context out of Async method
       // ignore: use_build_context_synchronously
       Navigator.of(context).push(platformPageRoute(
-          builder: (context) => PlaylistList(ctx: ctx,),
+          builder: (context) => SongsList(subSonicContext: ctx),
           // ignore: todo
           context: context)); //TODO: do not use Navigator in async method
     } else {
@@ -264,12 +265,12 @@ class _Login extends State<Login> {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         PlatformSwitch(
-          value: isRemeberMe,
+          value: shouldSaveCredentials,
           onChanged: (value) {
             setState(() {
-              isRemeberMe = value;
-              saveUser(isLoggedInKey, isRemeberMe);
-              if (isRemeberMe) {
+              shouldSaveCredentials = value;
+              saveUser(isLoggedInKey, shouldSaveCredentials);
+              if (shouldSaveCredentials) {
                 saveCredentials(
                   _server,
                   _username,
