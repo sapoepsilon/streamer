@@ -137,15 +137,15 @@ class _SongsList extends State<SongsList> {
 
   BottomAppBar _buildBottomNavigationBar() {
     return BottomAppBar(
-      color: const Color.fromRGBO(0, 0, 0, 0.5),
+      color: const Color.fromRGBO(130, 75, 255, 0.25),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
             onPressed: () {},
             icon: const Icon(
-              Icons.home_outlined,
-              color: Colors.white,
+              Icons.home,
+              color: Colors.purple,
               size: 40,
             ),
             //color: Colors.black,
@@ -153,29 +153,29 @@ class _SongsList extends State<SongsList> {
           IconButton(
             onPressed: () {},
             icon: const Icon(
-              Icons.search_outlined,
-              color: Colors.white,
+              Icons.search,
+              color: Colors.purple,
               size: 40,
             ),
-            color: Colors.white,
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              isCupertino(context) ? CupertinoIcons.heart : Icons.hearing_sharp,
-              color: Colors.white,
-              size: 40,
-            ),
-            color: Colors.black,
+            color: Colors.purple,
           ),
           IconButton(
             onPressed: () {},
             icon: const Icon(
-              Icons.person_outlined,
-              color: Colors.white,
+              Icons.piano,
+              color: Colors.purple,
               size: 40,
             ),
-            color: Colors.black,
+            color: Colors.purple,
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.person,
+              color: Colors.purple,
+              size: 40,
+            ),
+            color: Colors.purple,
           ),
         ],
       ),
