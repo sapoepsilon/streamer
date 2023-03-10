@@ -6,7 +6,7 @@ import 'package:streamer/utils/service_locator.dart';
 import 'audio_handler.dart';
 import 'login.dart';
 
-void main()  {
+void main() {
   runApp(const MyApp());
 }
 

@@ -135,50 +135,21 @@ class _SongsList extends State<SongsList> {
     );
   }
 
-  BottomAppBar _buildBottomNavigationBar() {
-    return BottomAppBar(
-      color: const Color.fromRGBO(130, 75, 255, 0.25),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.home,
-              color: Colors.purple,
-              size: 40,
-            ),
-            //color: Colors.black,
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.search,
-              color: Colors.purple,
-              size: 40,
-            ),
-            color: Colors.purple,
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.piano,
-              color: Colors.purple,
-              size: 40,
-            ),
-            color: Colors.purple,
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.person,
-              color: Colors.purple,
-              size: 40,
-            ),
-            color: Colors.purple,
-          ),
-        ],
-      ),
+  BottomNavigationBar _buildBottomNavigationBar() {
+    return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
+      backgroundColor: Colors.purple,
+      selectedItemColor: Colors.lightBlue,
+      unselectedItemColor: Colors.white,
+      elevation: 20,
+      //currentIndex: _selectedScreenIndex,
+      //onTap: _selectScreen,
+      items: const [
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+        BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Search'),
+        BottomNavigationBarItem(icon: Icon(Icons.piano), label: 'Library'),
+        BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Settings'),
+      ],
     );
   }
 
