@@ -10,19 +10,24 @@ import 'package:just_audio/just_audio.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:siri_wave/siri_wave.dart';
 import 'package:streamer/repository/MusicBrainz/mbid.dart';
+import 'package:streamer/subsonic/requests/get_album.dart';
 
 class Player extends StatefulWidget {
   final String url;
   final String title;
   final String artist;
   final String album;
+  final int songIndex;
+  final List<SongResult> songList;
 
   const Player(
       {Key? key,
       required this.url,
       required this.title,
       required this.artist,
-      required this.album})
+      required this.album,
+      required this.songIndex,
+      required this.songList})
       : super(key: key);
 
   @override
@@ -36,10 +41,17 @@ class _Player extends State<Player> {
   String songURL = "";
   bool isAlbumArtLoading = true;
 
+  late int initializedSongIndex;
+  late int nextSongIndex;
+  late int previousSongIndex;
+
   @override
   void initState() {
     super.initState();
-    _setSong();
+    initializedSongIndex = widget.songIndex;
+    nextSongIndex = initializedSongIndex + 1;
+    previousSongIndex = initializedSongIndex - 1;
+    _setSong(widget.url);
     _play();
     _scrollController = ScrollController();
   }
@@ -50,8 +62,8 @@ class _Player extends State<Player> {
     super.dispose();
   }
 
-  void _setSong() async {
-    await _audioPlayer.setUrl(widget.url);
+  void _setSong(String url) async {
+    await _audioPlayer.setUrl(url);
   }
 
   void _play() async {
@@ -63,6 +75,28 @@ class _Player extends State<Player> {
     } catch (e) {
       log("error while playing: $e");
     }
+  }
+
+  void _playNextSong(String songURL) {
+    if (initializedSongIndex != widget.songList.length) {
+      initializedSongIndex = nextSongIndex;
+      nextSongIndex = nextSongIndex + 1;
+    } else {
+      initializedSongIndex = 0;
+      nextSongIndex = 1;
+    }
+    _setSong(songURL);
+  }
+
+  void _playPreviousSong(String songURL) {
+    if (initializedSongIndex != widget.songList.length) {
+      initializedSongIndex = nextSongIndex;
+      nextSongIndex = nextSongIndex - 1;
+    } else {
+      initializedSongIndex = widget.songList.length;
+      nextSongIndex = widget.songList.length - 1;
+    }
+    _setSong(songURL);
   }
 
   void _pause() async {
@@ -209,7 +243,9 @@ class _Player extends State<Player> {
                     CupertinoIcons.backward,
                     color: Colors.white,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    _playPreviousSong(widget.songList[nextSongIndex].playUrl);
+                  },
                 ),
               ),
               Flexible(
@@ -253,7 +289,9 @@ class _Player extends State<Player> {
                     CupertinoIcons.forward_end_alt,
                     color: Colors.white,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    _playNextSong(widget.songList[nextSongIndex].playUrl);
+                  },
                 ),
               ),
             ],
