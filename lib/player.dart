@@ -275,7 +275,7 @@ class _Player extends State<Player> {
                     setState(() {
                       _isPlaying = !_isPlaying;
                     });
-                     _isPlaying ? _pause() : _play();
+                     _isPlaying ? _play() : _pause();
                   },
                 ),
               ),
