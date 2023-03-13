@@ -271,10 +271,11 @@ class _Player extends State<Player> {
                       ? const Icon(Icons.pause)
                       : const Icon(Icons.play_arrow),
                   onPressed: () {
-                    _isPlaying ? _pause() : _play();
+                   
                     setState(() {
                       _isPlaying = !_isPlaying;
                     });
+                     _isPlaying ? _pause() : _play();
                   },
                 ),
               ),
