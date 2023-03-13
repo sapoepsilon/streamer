@@ -1,5 +1,3 @@
-// ignore_for_file: invalid_return_type_for_catch_error, prefer_typing_uninitialized_variables, unused_field
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
@@ -135,29 +133,10 @@ class _SongsList extends State<SongsList> {
     );
   }
 
-  BottomNavigationBar _buildBottomNavigationBar() {
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      backgroundColor: Colors.purple,
-      selectedItemColor: Colors.lightBlue,
-      unselectedItemColor: Colors.white,
-      elevation: 20,
-      //currentIndex: _selectedScreenIndex,
-      //onTap: _selectScreen,
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-        BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Search'),
-        BottomNavigationBarItem(icon: Icon(Icons.piano), label: 'Library'),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Settings'),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      bottomNavigationBar: _buildBottomNavigationBar(),
       backgroundColor: Colors.transparent,
       body: Container(
         decoration: const BoxDecoration(

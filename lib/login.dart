@@ -1,16 +1,14 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:streamer/helpers/globals.dart';
-import 'package:streamer/home.dart';
 import 'package:streamer/helpers/helpers.dart';
-import 'package:streamer/pages/Songs_List.dart';
 import 'package:streamer/subsonic/context.dart';
 import 'package:streamer/subsonic/requests/ping.dart';
 import 'package:streamer/subsonic/response.dart';
 import 'package:streamer/utils/shared_preferences.dart';
+
+import 'package:streamer/navigation.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -154,7 +152,9 @@ class _Login extends State<Login> {
       // TODO: move methods with context out of Async method
       // ignore: use_build_context_synchronously
       Navigator.of(context).push(platformPageRoute(
-          builder: (context) => SongsList(subSonicContext: ctx),
+          //builder: (context) => SongsList(subSonicContext: ctx),
+          // COMMENT LINE ABOVE AND UNCOMMENT LINE BELOW FOR GLOBAL NAV
+          builder: (context) => Navigation(subSonicContext: ctx),
           // ignore: todo
           context: context)); //TODO: do not use Navigator in async method
     } else {
@@ -236,7 +236,7 @@ class _Login extends State<Login> {
         },
         onPressed: _connectToServer,
         child: const Text(
-          "Conect",
+          "Connect",
           style: TextStyle(
             color: Colors.white,
             fontSize: 20,
