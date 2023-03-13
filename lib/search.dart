@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:streamer/subsonic/requests/search3.dart';
+import 'package:streamer/subsonic/subsonic.dart';
 
 class Search extends StatefulWidget {
-  const Search({super.key});
+  const Search({super.key, this.subSonicContext});
+  final subSonicContext;
 
   @override
   // ignore: library_private_types_in_public_api
@@ -99,9 +102,35 @@ class CustomSearch extends SearchDelegate {
         });
   }
 
+  void searchSubsonic(String query, SubsonicContext subsonicContext) {
+    var errorMessage = "";
+    var queryResult =
+        Search3Request(query).run(subsonicContext).catchError((err) {
+      debugPrint('error: network issue? $err');
+      errorMessage = err.toString();
+    });
+
+    queryResult.
+
+      if (queryResult. == ResponseStatus.ok) {
+      saveCredentials(_username, _password, _server);
+      // ignore: todo
+      // TODO: move methods with context out of Async method
+      // ignore: use_build_context_synchronously
+      Navigator.of(context).push(platformPageRoute(
+          builder: (context) => SongsList(subSonicContext: ctx),
+          // ignore: todo
+          context: context)); //TODO: do not use Navigator in async method
+    } else {
+      // ignore: use_build_context_synchronously
+      debugPrint("Searching error status ${queryResult.status.toString()})"
+    }
+  }
+
   @override
   Widget buildResults(BuildContext context) {
     List<String> matchQuery = [];
+
     for (var item in playlist) {
       if (item.toLowerCase().contains(query.toLowerCase())) {
         matchQuery.add(item);
