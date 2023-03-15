@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Search extends StatefulWidget {
-  const Search({super.key});
+  final String query;
+  const Search({super.key, required this.query});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -19,7 +20,7 @@ class _Search extends State<Search> {
             onPressed: () {
               showSearch(
                 context: context,
-                delegate: CustomSearchDelegate(),
+                delegate: CustomSearchDelegate(searchQuery: widget.query),
               );
             },
             icon: const Icon(Icons.search),
@@ -31,14 +32,17 @@ class _Search extends State<Search> {
 }
 
 class CustomSearchDelegate extends SearchDelegate {
-  List<String> searchTerms = ['Quesariya', 'Lofi music', 'Believer'];
+  final String searchQuery;
+
+  CustomSearchDelegate({required this.searchQuery});
+
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
         icon: const Icon(Icons.clear),
         onPressed: () {
-          query = '';
+          query = searchQuery;
         },
       ),
     ];
@@ -56,12 +60,8 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
+    // we need parse are subsonic result
     List<String> matchquery = [];
-    for (var title in searchTerms) {
-      if (title.toLowerCase().contains(query.toLowerCase())) {
-        matchquery.add(title);
-      }
-    }
     return ListView.builder(
       itemCount: matchquery.length,
       itemBuilder: (context, index) {
@@ -74,11 +74,6 @@ class CustomSearchDelegate extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     List<String> matchquery = [];
-    for (var title in searchTerms) {
-      if (title.toLowerCase().contains(query.toLowerCase())) {
-        matchquery.add(title);
-      }
-    }
     return ListView.builder(
       itemCount: matchquery.length,
       itemBuilder: (context, index) {

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:streamer/player.dart';
+import 'package:streamer/search.dart';
 import 'package:streamer/subsonic/requests/download.dart';
 import 'package:streamer/subsonic/requests/get_album.dart';
 import 'package:streamer/subsonic/requests/requests.dart';
@@ -120,8 +121,8 @@ class _SongsList extends State<SongsList> {
     return songList;
   }
 
-  Future<void> play(
-      String songID, String album, String artist, String title) async {
+  Future<void> play(String songID, String album, String artist, String title,
+      int songIndex) async {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => Player(
@@ -130,6 +131,8 @@ class _SongsList extends State<SongsList> {
           album: album,
           artist: artist,
           title: title,
+          songIndex: songIndex,
+          songList: songList,
         ),
       ),
     );
@@ -197,97 +200,117 @@ class _SongsList extends State<SongsList> {
             ],
           ),
         ),
-        child: ListView.builder(
-          itemCount: songList.length,
-          itemBuilder: (context, index) {
-            var title = songList[index].title;
-            var subtitle = songList[index].artistName;
-
-            return Container(
-              margin: const EdgeInsets.only(top: 8.0, left: 10.0, right: 10.0),
-              decoration: BoxDecoration(
-                color: const Color.fromRGBO(0, 0, 0, 0.3),
-                borderRadius: BorderRadius.circular(25.0),
-                border: Border.all(
-                  color: Colors.black,
-                  width: 1.0,
-                ),
+        child: Column(
+          children: [
+            Container(
+              height: 120,
+              child: Search(
+                query: '',
               ),
-              child: ListTile(
-                visualDensity: const VisualDensity(vertical: -3), // to compact
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.download),
-                      color: Colors.white,
-                      onPressed: () {
-                        DownloadItem(songList[index].id)
-                            .run(widget.subSonicContext);
-                      },
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        Icons.favorite,
-                        color:
-                            songList[index].starred ? Colors.red : Colors.white,
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: songList.length,
+                itemBuilder: (context, index) {
+                  var title = songList[index].title;
+                  var subtitle = songList[index].artistName;
+
+                  return Container(
+                    margin: const EdgeInsets.only(
+                        top: 8.0, left: 10.0, right: 10.0),
+                    decoration: BoxDecoration(
+                      color: const Color.fromRGBO(0, 0, 0, 0.3),
+                      borderRadius: BorderRadius.circular(25.0),
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 1.0,
                       ),
-                      color: Colors.white,
-                      onPressed: () {
-                        setState(() {
-                          songList[index].starred
-                              ? UnstarItem(
-                                      id: SongId(songId: songList[index].id))
-                                  .run(widget.subSonicContext)
-                              : StarItem(id: SongId(songId: songList[index].id))
-                                  .run(widget.subSonicContext)
-                                  .catchError((err) {
-                                  debugPrint('error: network issue? $err');
-                                  // errorMessage = err.toString();
-                                  return Future.value(SubsonicResponse(
-                                    ResponseStatus.failed,
-                                    "Network issue",
-                                    '',
-                                  ));
-                                });
-                        });
+                    ),
+                    child: ListTile(
+                      visualDensity:
+                          const VisualDensity(vertical: -3), // to compact
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.download),
+                            color: Colors.white,
+                            onPressed: () {
+                              DownloadItem(songList[index].id)
+                                  .run(widget.subSonicContext);
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.favorite,
+                              color: songList[index].starred
+                                  ? Colors.red
+                                  : Colors.white,
+                            ),
+                            color: Colors.white,
+                            onPressed: () {
+                              setState(() {
+                                songList[index].starred
+                                    ? UnstarItem(
+                                            id: SongId(
+                                                songId: songList[index].id))
+                                        .run(widget.subSonicContext)
+                                    : StarItem(
+                                            id: SongId(
+                                                songId: songList[index].id))
+                                        .run(widget.subSonicContext)
+                                        .catchError((err) {
+                                        debugPrint(
+                                            'error: network issue? $err');
+                                        // errorMessage = err.toString();
+                                        return Future.value(SubsonicResponse(
+                                          ResponseStatus.failed,
+                                          "Network issue",
+                                          '',
+                                        ));
+                                      });
+                              });
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.more_horiz),
+                            color: Colors.white,
+                            onPressed: () {},
+                          ),
+                        ],
+                      ),
+                      textColor: const Color.fromARGB(204, 11, 170, 14),
+                      title: Text(
+                        title,
+                        style: const TextStyle(overflow: TextOverflow.ellipsis),
+                      ),
+                      subtitle: Text(
+                        subtitle,
+                        style: const TextStyle(
+                            color: Colors.white70,
+                            fontSize: 12.0,
+                            overflow: TextOverflow.ellipsis),
+                      ),
+                      leading: albumArt(songList[index]),
+                      onTap: () async {
+                        // await player.pause();
+                        final streamURL = StreamItem(
+                                songList[index].id.toString(),
+                                streamFormat: StreamFormat.mp3)
+                            .getDownloadUrl(widget.subSonicContext);
+
+                        final artist = songList[index].artistName;
+                        final album = songList[index].albumName;
+                        final title = songList[index].title;
+
+                        play(streamURL, album, artist, title, index);
                       },
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.more_horiz),
-                      color: Colors.white,
-                      onPressed: () {},
-                    ),
-                  ],
-                ),
-                textColor: const Color.fromARGB(204, 11, 170, 14),
-                title: Text(
-                  title,
-                  style: const TextStyle(overflow: TextOverflow.ellipsis),
-                ),
-                subtitle: Text(
-                  subtitle,
-                  style: const TextStyle(
-                      color: Colors.white70,
-                      fontSize: 12.0,
-                      overflow: TextOverflow.ellipsis),
-                ),
-                leading: albumArt(songList[index]),
-                onTap: () async {
-                  // await player.pause();
-                  final streamURL = StreamItem(songList[index].id.toString(),
-                          streamFormat: StreamFormat.mp3)
-                      .getDownloadUrl(widget.subSonicContext);
-
-                  final artist = songList[index].artistName;
-                  final album = songList[index].albumName;
-                  final title = songList[index].title;
-
-                  play(streamURL, album, artist, title);
+                  );
                 },
               ),
-            );
-          },
+            ),
+          ],
         ),
       ),
     );

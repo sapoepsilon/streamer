@@ -10,19 +10,24 @@ import 'package:just_audio/just_audio.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:siri_wave/siri_wave.dart';
 import 'package:streamer/repository/MusicBrainz/mbid.dart';
+import 'package:streamer/subsonic/requests/get_album.dart';
 
 class Player extends StatefulWidget {
   final String url;
   final String title;
   final String artist;
   final String album;
+  final int songIndex;
+  final List<SongResult> songList;
 
   const Player(
       {Key? key,
       required this.url,
       required this.title,
       required this.artist,
-      required this.album})
+      required this.album,
+      required this.songIndex,
+      required this.songList})
       : super(key: key);
 
   @override
@@ -36,10 +41,17 @@ class _Player extends State<Player> {
   String songURL = "";
   bool isAlbumArtLoading = true;
 
+  late int initializedSongIndex;
+  late int nextSongIndex;
+  late int previousSongIndex;
+
   @override
   void initState() {
     super.initState();
-    _setSong();
+    initializedSongIndex = widget.songIndex;
+    nextSongIndex = initializedSongIndex + 1;
+    previousSongIndex = initializedSongIndex - 1;
+    _setSong(widget.url);
     _play();
     _scrollController = ScrollController();
   }
@@ -50,8 +62,8 @@ class _Player extends State<Player> {
     super.dispose();
   }
 
-  void _setSong() async {
-    await _audioPlayer.setUrl(widget.url);
+  void _setSong(String url) async {
+    await _audioPlayer.setUrl(url);
   }
 
   void _play() async {
@@ -65,12 +77,45 @@ class _Player extends State<Player> {
     }
   }
 
+  void _playNextSong(String songURL) {
+    if (initializedSongIndex != widget.songList.length) {
+      initializedSongIndex = nextSongIndex;
+      nextSongIndex = nextSongIndex + 1;
+    } else {
+      initializedSongIndex = 0;
+      nextSongIndex = 1;
+    }
+      String nextSongURL = widget.songList[nextSongIndex].playUrl;
+     _setSong(nextSongURL);
+     getImageData(initializedSongIndex).then((image){
+      setState(() {
+        Image.network(songURL);
+       
+
+      });
+     });
+    _play();
+    
+  }
+
+  void _playPreviousSong(String songURL) {
+    if (initializedSongIndex != widget.songList.length) {
+      initializedSongIndex = nextSongIndex;
+      nextSongIndex = nextSongIndex - 1;
+
+    } else {
+      initializedSongIndex = widget.songList.length;
+      nextSongIndex = widget.songList.length - 1;
+    }
+    _setSong(songURL);
+  }
+
   void _pause() async {
     await _audioPlayer.pause();
   }
 
-  Future<Widget> getImageData() async {
-    String mbid = await fetchMBID(widget.album, widget.artist) ?? "";
+  Future<Widget> getImageData(int songIndex) async {
+    String mbid = await fetchMBID(widget.songList[songIndex].albumName, widget.songList[songIndex].artistName) ?? "";
     songURL = await fetchAlbumArtURL(mbid) ?? "";
     if (songURL != "") {
       isAlbumArtLoading = false;
@@ -82,13 +127,14 @@ class _Player extends State<Player> {
         size: 24.0,
       );
     } else {
+      
       return Image.network(songURL);
     }
   }
 
   FutureBuilder albumArt() {
     return FutureBuilder(
-      future: getImageData(),
+      future: getImageData(initializedSongIndex),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return snapshot.data as Widget;
@@ -141,14 +187,14 @@ class _Player extends State<Player> {
           Column(
             children: [
               PlatformText(
-                widget.title,
+                              widget.songList[initializedSongIndex].title,
                 style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 24,
                     color: Colors.white),
               ),
               PlatformText(
-                widget.artist,
+               widget.songList[initializedSongIndex].artistName,
                 style: const TextStyle(fontSize: 18, color: Colors.white),
               ),
             ],
@@ -209,7 +255,9 @@ class _Player extends State<Player> {
                     CupertinoIcons.backward,
                     color: Colors.white,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    _playPreviousSong(widget.songList[nextSongIndex].playUrl);
+                  },
                 ),
               ),
               Flexible(
@@ -235,10 +283,11 @@ class _Player extends State<Player> {
                       ? const Icon(Icons.pause)
                       : const Icon(Icons.play_arrow),
                   onPressed: () {
-                    _isPlaying ? _pause() : _play();
+                   
                     setState(() {
                       _isPlaying = !_isPlaying;
                     });
+                     _isPlaying ? _play() : _pause();
                   },
                 ),
               ),
@@ -253,7 +302,9 @@ class _Player extends State<Player> {
                     CupertinoIcons.forward_end_alt,
                     color: Colors.white,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    _playNextSong(widget.songList[nextSongIndex].playUrl);
+                  },
                 ),
               ),
             ],
