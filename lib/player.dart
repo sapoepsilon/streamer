@@ -85,13 +85,24 @@ class _Player extends State<Player> {
       initializedSongIndex = 0;
       nextSongIndex = 1;
     }
-    _setSong(songURL);
+      String nextSongURL = widget.songList[nextSongIndex].playUrl;
+     _setSong(nextSongURL);
+     getImageData(initializedSongIndex).then((image){
+      setState(() {
+        Image.network(songURL);
+       
+
+      });
+     });
+    _play();
+    
   }
 
   void _playPreviousSong(String songURL) {
     if (initializedSongIndex != widget.songList.length) {
       initializedSongIndex = nextSongIndex;
       nextSongIndex = nextSongIndex - 1;
+
     } else {
       initializedSongIndex = widget.songList.length;
       nextSongIndex = widget.songList.length - 1;
@@ -103,8 +114,8 @@ class _Player extends State<Player> {
     await _audioPlayer.pause();
   }
 
-  Future<Widget> getImageData() async {
-    String mbid = await fetchMBID(widget.album, widget.artist) ?? "";
+  Future<Widget> getImageData(int songIndex) async {
+    String mbid = await fetchMBID(widget.songList[songIndex].albumName, widget.songList[songIndex].artistName) ?? "";
     songURL = await fetchAlbumArtURL(mbid) ?? "";
     if (songURL != "") {
       isAlbumArtLoading = false;
@@ -116,13 +127,14 @@ class _Player extends State<Player> {
         size: 24.0,
       );
     } else {
+      
       return Image.network(songURL);
     }
   }
 
   FutureBuilder albumArt() {
     return FutureBuilder(
-      future: getImageData(),
+      future: getImageData(initializedSongIndex),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return snapshot.data as Widget;
@@ -175,14 +187,14 @@ class _Player extends State<Player> {
           Column(
             children: [
               PlatformText(
-                widget.title,
+                              widget.songList[initializedSongIndex].title,
                 style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 24,
                     color: Colors.white),
               ),
               PlatformText(
-                widget.artist,
+               widget.songList[initializedSongIndex].artistName,
                 style: const TextStyle(fontSize: 18, color: Colors.white),
               ),
             ],
