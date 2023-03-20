@@ -1,24 +1,38 @@
+import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:streamer/helpers/custom_models/credentials_model.dart';
 
 // Saving credentials
-void saveCredentials(String username, String password, String server) async {
-  final prefs = await SharedPreferences.getInstance();
-  prefs.setString("username", username);
-  prefs.setString("password", password);
-  prefs.setString("server", server);
+void saveCredentials(Credentials credentials) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String customModelJson = jsonEncode(credentials.toJson());
+  prefs.setString("credentials_${credentials.name}", customModelJson);
 }
 
 // Retrieving credentials
-Future<Map<String, String>> getCredentials() async {
-  final prefs = await SharedPreferences.getInstance();
-  final username = prefs.getString("username");
-  final password = prefs.getString("password");
-  final server = prefs.getString("server");
-  return {
-    "username": username ?? "noUsername",
-    "password": password ?? "noPassword",
-    "server": server ?? "noServer"
-  };
+Future<List<Credentials>?> getCredentials() async {
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  Iterable<String> keys =
+      prefs.getKeys().where((key) => key.startsWith('credentials_'));
+  List<String?> retrievedValues = [];
+
+  for (String key in keys) {
+    String? customModelJson = prefs.getString(key);
+    if (customModelJson != null) {
+      retrievedValues.add(customModelJson);
+    }
+  }
+  if (retrievedValues == []) {
+    return null;
+  }
+
+  List<Credentials> credentials = [];
+  for (String? customModelJson in retrievedValues) {
+    credentials.add(Credentials.fromJson(jsonDecode(customModelJson!)));
+  }
+  return credentials;
 }
 
 // save boolean
