@@ -14,7 +14,6 @@ class Navigation extends StatefulWidget {
 
 class _Navigation extends State<Navigation> {
   int _selectedTab = 0;
-  SubsonicContext? ctx;
 
   @override
   void initState() {
@@ -38,13 +37,11 @@ class _Navigation extends State<Navigation> {
   _changeTab(int index) {
     setState(() {
       _selectedTab = index;
-      debugPrint("selected tab: $_selectedTab");
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    ctx = widget.subSonicContext;
     return Scaffold(
       appBar: AppBar(),
       body: _children(widget.subSonicContext, _selectedTab),
