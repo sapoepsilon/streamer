@@ -1,28 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:streamer/home.dart';
 import 'package:streamer/pages/Songs_List.dart';
+import 'package:streamer/subsonic/subsonic.dart';
 
 class Navigation extends StatefulWidget {
-  final subSonicContext;
+  final SubsonicContext subSonicContext;
 
   const Navigation({super.key, required this.subSonicContext});
 
   @override
-  _NavigationState createState() => _NavigationState();
+  State<Navigation> createState() => _Navigation();
 }
 
-class _NavigationState extends State {
+class _Navigation extends State<Navigation> {
   int _selectedTab = 0;
 
-  // LOOK AT ME MA I'M A LITTLE TROUBLEMAKER THAT WILL RUIN YOUR LIFE UNLESS YOU LOOK AT ME!!!
-  // We need to figure out how to pass information from the login screen to here and then to the available pages.
-  List _pages = [
-    SongsList(
-      // This ctx variable is empty, figure out how to pass the value from the login screen to here and then through here.
-      subSonicContext: ctx,
-    )
-  ];
+  @override
+  void initState() {
+    super.initState();
+  }
 
-  static var ctx;
+  Widget _children(SubsonicContext context, int index) {
+    List<Widget> children = [
+      SongsList(subSonicContext: context),
+      Home(subSonicContext: context),
+      // Augusto please add your settings page here
+
+    ];
+    if (index < 2) {
+      return children[index];
+    } else {
+      return children[0];
+    }
+  }
 
   _changeTab(int index) {
     setState(() {
@@ -34,7 +44,7 @@ class _NavigationState extends State {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: _pages[_selectedTab],
+      body: _children(widget.subSonicContext, _selectedTab),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.purple,
@@ -42,7 +52,7 @@ class _NavigationState extends State {
         onTap: (index) => _changeTab(index),
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.blue,
-        items: [
+        items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(
               icon: Icon(Icons.favorite), label: "Favorites"),
