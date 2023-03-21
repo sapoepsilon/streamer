@@ -76,13 +76,14 @@ class _Login extends State<Login> {
                 height: double.infinity,
                 width: double.infinity,
                 decoration: const BoxDecoration(
-                    gradient: RadialGradient(
-                  colors: [
-                    Colors.teal,
-                    Colors.black,
-                  ],
-                  radius: .8,
-                )),
+                  gradient: RadialGradient(
+                    colors: [
+                      Colors.teal,
+                      Colors.black,
+                    ],
+                    radius: .8,
+                  ),
+                ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -121,12 +122,21 @@ class _Login extends State<Login> {
     );
   }
 
-  Future<List<Credentials>> checkCredentials() async {
+  Future<void> checkCredentials() async {
     if (await getBool(isLoggedInKey)) {
       savedCredentials = await getCredentials() ?? [];
-      return savedCredentials;
-    } else {
-      return [];
+      for (var element in savedCredentials) {
+        setState(() {
+          _name = element.name;
+          _username = element.username;
+          _password = element.password;
+          _server = element.server;
+        });
+      }
+      debugPrint(_name);
+      debugPrint(_username);
+      debugPrint(_password);
+      _connectToServer();
     }
   }
 

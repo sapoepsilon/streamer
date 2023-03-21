@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:streamer/player.dart';
 import 'package:streamer/subsonic/requests/download.dart';
 import 'package:streamer/subsonic/requests/get_album.dart';
@@ -34,10 +35,10 @@ class _SongsList extends State<SongsList> {
         if (snapshot.hasData) {
           return snapshot.data as Widget;
         } else {
-          return const Icon(
-            Icons.question_mark_outlined,
-            color: Colors.grey,
-            size: 24.0,
+          return LoadingAnimationWidget.staggeredDotsWave(
+            // LoadingAnimationwidget that call the
+            color: Colors.green, // staggereddotwave animation
+            size: 30,
           );
         }
       },
@@ -73,7 +74,7 @@ class _SongsList extends State<SongsList> {
 
   Future<List<SongResult>> _fetchAllSongs() async {
     final albumList =
-        await GetAlbumList2(type: GetAlbumListType.alphabeticalByArtist)
+        await GetAlbumList2(type: GetAlbumListType.alphabeticalByArtist, size: 500)
             .run(widget.subSonicContext)
             .catchError((err) {
       debugPrint('error: network issue? $err');
@@ -102,7 +103,10 @@ class _SongsList extends State<SongsList> {
         if (fetchedAlbum.status == ResponseStatus.ok) {
           for (var song in fetchedAlbum.data.songs) {
             setState(() {
-              songList.add(song);
+              if (!songList.contains(song)) {
+                print("Song: ${song.title}");
+                songList.add(song);
+              }
             });
           }
         }
@@ -160,7 +164,8 @@ class _SongsList extends State<SongsList> {
                 ),
               ),
               child: ListTile(
-                visualDensity: const VisualDensity(vertical: -3), // to compact
+                visualDensity: const VisualDensity(vertical: -3),
+                // to compact
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -224,11 +229,9 @@ class _SongsList extends State<SongsList> {
                   final streamURL = StreamItem(songList[index].id.toString(),
                           streamFormat: StreamFormat.mp3)
                       .getDownloadUrl(widget.subSonicContext);
-
                   final artist = songList[index].artistName;
                   final album = songList[index].albumName;
                   final title = songList[index].title;
-
                   play(streamURL, album, artist, title);
                 },
               ),

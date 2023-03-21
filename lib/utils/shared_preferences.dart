@@ -12,7 +12,6 @@ void saveCredentials(Credentials credentials) async {
 
 // Retrieving credentials
 Future<List<Credentials>?> getCredentials() async {
-
   SharedPreferences prefs = await SharedPreferences.getInstance();
   Iterable<String> keys =
       prefs.getKeys().where((key) => key.startsWith('credentials_'));
