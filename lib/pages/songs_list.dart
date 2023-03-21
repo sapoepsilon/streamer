@@ -1,8 +1,4 @@
-// ignore_for_file: invalid_return_type_for_catch_error, prefer_typing_uninitialized_variables, unused_field
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:streamer/player.dart';
 import 'package:streamer/subsonic/requests/download.dart';
@@ -10,21 +6,19 @@ import 'package:streamer/subsonic/requests/get_album.dart';
 import 'package:streamer/subsonic/requests/requests.dart';
 import 'package:streamer/subsonic/requests/star.dart';
 import 'package:streamer/subsonic/requests/stream_id.dart';
-import 'package:streamer/subsonic/response.dart';
 import 'package:streamer/subsonic/subsonic.dart';
 import 'package:streamer/utils/utils.dart';
 
 class SongsList extends StatefulWidget {
   const SongsList({super.key, required this.subSonicContext});
 
-  final subSonicContext;
+  final SubsonicContext subSonicContext;
 
   @override
   State<SongsList> createState() => _SongsList();
 }
 
 class _SongsList extends State<SongsList> {
-  final AudioPlayer _player = AudioPlayer();
   List<SongResult> songList = [];
 
   @override
@@ -135,58 +129,10 @@ class _SongsList extends State<SongsList> {
     );
   }
 
-  BottomAppBar _buildBottomNavigationBar() {
-    return BottomAppBar(
-      color: const Color.fromRGBO(0, 0, 0, 0.5),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.home_outlined,
-              color: Colors.white,
-              size: 40,
-            ),
-            //color: Colors.black,
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.search_outlined,
-              color: Colors.white,
-              size: 40,
-            ),
-            color: Colors.white,
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              isCupertino(context) ? CupertinoIcons.heart : Icons.hearing_sharp,
-              color: Colors.white,
-              size: 40,
-            ),
-            color: Colors.black,
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.person_outlined,
-              color: Colors.white,
-              size: 40,
-            ),
-            color: Colors.black,
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      bottomNavigationBar: _buildBottomNavigationBar(),
       backgroundColor: Colors.transparent,
       body: Container(
         decoration: const BoxDecoration(
