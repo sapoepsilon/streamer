@@ -6,7 +6,7 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:streamer/helpers/custom_models/credentials_model.dart';
 import 'package:streamer/helpers/globals.dart';
 import 'package:streamer/helpers/helpers.dart';
-import 'package:streamer/pages/Songs_List.dart';
+import 'package:streamer/pages/songs_list.dart';
 import 'package:streamer/subsonic/context.dart';
 import 'package:streamer/subsonic/requests/ping.dart';
 import 'package:streamer/subsonic/response.dart';
