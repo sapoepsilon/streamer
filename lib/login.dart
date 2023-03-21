@@ -12,6 +12,7 @@ import 'package:streamer/subsonic/requests/ping.dart';
 import 'package:streamer/subsonic/response.dart';
 import 'package:streamer/utils/shared_preferences.dart';
 
+import 'navigation.dart';
 import 'playlist.dart';
 
 class Login extends StatefulWidget {
@@ -171,7 +172,7 @@ class _Login extends State<Login> {
       // TODO: move methods with context out of Async method
       // ignore: use_build_context_synchronously
       Navigator.of(context).push(platformPageRoute(
-          builder: (context) => SongsList(subSonicContext: ctx),
+          builder: (context) => Navigation(subSonicContext: ctx),
           // ignore: todo
           context: context)); //TODO: do not use Navigator in async method
     } else {

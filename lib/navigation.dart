@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:streamer/home.dart';
 import 'package:streamer/pages/songs_list.dart';
+import 'package:streamer/playlist.dart';
 import 'package:streamer/subsonic/subsonic.dart';
 
 class Navigation extends StatefulWidget {
@@ -23,6 +24,7 @@ class _Navigation extends State<Navigation> {
   Widget _children(SubsonicContext context, int index) {
     List<Widget> children = [
       SongsList(subSonicContext: context),
+      PlaylistList(ctx: context),
       Home(subSonicContext: context),
       // Augusto please add your settings page here
 

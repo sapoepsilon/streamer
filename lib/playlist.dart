@@ -53,19 +53,6 @@ class _PlaylistListState extends State<PlaylistList> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: const Color(0xFF701ebd),
-      appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: Colors.transparent,
-        title: const Center(
-          child: Text(
-            "Playlists",
-            style: TextStyle(
-                fontSize: 25.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.white70),
-          ),
-        ),
-      ),
       body: Container(
           height: double.infinity,
           width: double.infinity,
