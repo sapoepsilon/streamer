@@ -101,13 +101,13 @@ class _Login extends State<Login> {
                         "http://192.168.0.34:4533", _getServerValueText),
                     textFieldSpacer(screenSize),
                     field(
-                        isTablet, screenSize, _name, "Name", _getNameValuetext),
+                        isTablet, screenSize, _name, "Name", _getNameValueText),
                     textFieldSpacer(screenSize),
                     field(isTablet, screenSize, _username, "Username",
-                        _getUsernameValuetext),
+                        _getUsernameValueText),
                     textFieldSpacer(screenSize),
                     field(isTablet, screenSize, _password, "Password",
-                        _getPasswordValuetext, true),
+                        _getPasswordValueText, true),
                     textFieldSpacer(screenSize),
                     rememberMe(isTablet, screenSize),
                     connect(isTablet, screenSize)
@@ -186,19 +186,19 @@ class _Login extends State<Login> {
     });
   }
 
-  void _getNameValuetext(String value) {
+  void _getNameValueText(String value) {
     setState(() {
       _name = value;
     });
   }
 
-  void _getUsernameValuetext(String value) {
+  void _getUsernameValueText(String value) {
     setState(() {
       _username = value;
     });
   }
 
-  void _getPasswordValuetext(String value) {
+  void _getPasswordValueText(String value) {
     setState(() {
       _password = value;
     });

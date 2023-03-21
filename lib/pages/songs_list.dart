@@ -73,10 +73,10 @@ class _SongsList extends State<SongsList> {
   }
 
   Future<List<SongResult>> _fetchAllSongs() async {
-    final albumList =
-        await GetAlbumList2(type: GetAlbumListType.alphabeticalByArtist, size: 500)
-            .run(widget.subSonicContext)
-            .catchError((err) {
+    final albumList = await GetAlbumList2(
+            type: GetAlbumListType.alphabeticalByArtist, size: 500)
+        .run(widget.subSonicContext)
+        .catchError((err) {
       debugPrint('error: network issue? $err');
       // errorMessage = err.toString();
       return Future.value(SubsonicResponse(
@@ -104,7 +104,6 @@ class _SongsList extends State<SongsList> {
           for (var song in fetchedAlbum.data.songs) {
             setState(() {
               if (!songList.contains(song)) {
-                print("Song: ${song.title}");
                 songList.add(song);
               }
             });
