@@ -4,6 +4,9 @@ import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 
+import '../subsonic/requests/get_album.dart';
+import '../utils/utils.dart';
+
 InputDecoration loginTextDecoration(String hintText) {
   return InputDecoration(
     border: InputBorder.none,
@@ -55,4 +58,47 @@ Future showErrorDialog(BuildContext context, String errorMessage) {
       );
     },
   );
+}
+FutureBuilder albumArt(SongResult song) {
+  return FutureBuilder(
+    future: getImageData(song),
+    builder: (context, snapshot) {
+      if (snapshot.hasData) {
+        return snapshot.data as Widget;
+      } else {
+        return const Icon(
+          Icons.question_mark_outlined,
+          color: Colors.grey,
+          size: 24.0,
+        );
+      }
+    },
+  );
+}
+
+Future<Widget> getImageData(SongResult song) async {
+  String songURL =
+      await getSongCoverFromITunes(song.artistName, song.title) ?? "";
+  if (songURL == "") {
+    return const Icon(
+      Icons.question_mark_outlined,
+      color: Colors.grey,
+      size: 24.0,
+    );
+  } else {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30.0),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(30.0),
+        child: Image.network(
+          songURL,
+          fit: BoxFit.fill,
+          width: 50,
+          height: 50,
+        ),
+      ),
+    );
+  }
 }

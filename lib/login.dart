@@ -6,7 +6,7 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:streamer/helpers/custom_models/credentials_model.dart';
 import 'package:streamer/helpers/globals.dart';
 import 'package:streamer/helpers/helpers.dart';
-import 'package:streamer/pages/songs_list.dart';
+import 'package:streamer/songs_list.dart';
 import 'package:streamer/subsonic/context.dart';
 import 'package:streamer/subsonic/requests/ping.dart';
 import 'package:streamer/subsonic/response.dart';
@@ -127,6 +127,9 @@ class _Login extends State<Login> {
     if (await getBool(isLoggedInKey)) {
       savedCredentials = await getCredentials() ?? [];
       for (var element in savedCredentials) {
+        debugPrint(element.name);
+        debugPrint(element.username);
+        debugPrint(element.password);
         setState(() {
           _name = element.name;
           _username = element.username;
@@ -134,9 +137,6 @@ class _Login extends State<Login> {
           _server = element.server;
         });
       }
-      debugPrint(_name);
-      debugPrint(_username);
-      debugPrint(_password);
       _connectToServer();
     }
   }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:streamer/home.dart';
-import 'package:streamer/pages/songs_list.dart';
+import 'package:streamer/songs_list.dart';
 import 'package:streamer/playlist.dart';
 import 'package:streamer/subsonic/subsonic.dart';
 
@@ -27,9 +27,8 @@ class _Navigation extends State<Navigation> {
       PlaylistList(ctx: context),
       Home(subSonicContext: context),
       // Augusto please add your settings page here
-
     ];
-    if (index < 2) {
+    if (index < 3) {
       return children[index];
     } else {
       return children[0];

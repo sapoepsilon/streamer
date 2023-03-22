@@ -151,7 +151,6 @@ class _SongsList extends State<SongsList> {
           itemBuilder: (context, index) {
             var title = songList[index].title;
             var subtitle = songList[index].artistName;
-
             return Container(
               margin: const EdgeInsets.only(top: 8.0, left: 10.0, right: 10.0),
               decoration: BoxDecoration(
@@ -164,6 +163,7 @@ class _SongsList extends State<SongsList> {
               ),
               child: ListTile(
                 visualDensity: const VisualDensity(vertical: -3),
+                key: ValueKey(songList[index]),
                 // to compact
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -190,16 +190,7 @@ class _SongsList extends State<SongsList> {
                                       id: SongId(songId: songList[index].id))
                                   .run(widget.subSonicContext)
                               : StarItem(id: SongId(songId: songList[index].id))
-                                  .run(widget.subSonicContext)
-                                  .catchError((err) {
-                                  debugPrint('error: network issue? $err');
-                                  // errorMessage = err.toString();
-                                  return Future.value(SubsonicResponse(
-                                    ResponseStatus.failed,
-                                    "Network issue",
-                                    '',
-                                  ));
-                                });
+                                  .run(widget.subSonicContext);
                         });
                       },
                     ),

@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:siri_wave/siri_wave.dart';
 import 'package:streamer/repository/MusicBrainz/mbid.dart';
 
 class Player extends StatefulWidget {
@@ -35,6 +34,7 @@ class _Player extends State<Player> {
   late ScrollController _scrollController;
   String songURL = "";
   bool isAlbumArtLoading = true;
+  double max = 0;
 
   @override
   void initState() {
@@ -52,6 +52,11 @@ class _Player extends State<Player> {
 
   void _setSong() async {
     await _audioPlayer.setUrl(widget.url);
+    await Future.delayed(const Duration(seconds: 3)); // delay for 1 second
+    setState(() {
+      max = _audioPlayer.duration?.inMilliseconds.toDouble() ?? 0;
+      debugPrint("Duration max: ${max}");
+    });
   }
 
   void _play() async {
@@ -164,16 +169,14 @@ class _Player extends State<Player> {
                   stream: _audioPlayer.positionStream,
                   builder: (context, snapshot) {
                     Duration progress = snapshot.data ?? const Duration();
-                    return PlatformSlider(
+                    return max == 0 ? const CircularProgressIndicator() : PlatformSlider(
                       activeColor: Colors.purple,
                       value: progress.inMilliseconds.toDouble(),
                       onChangeEnd: (double value) {
-                        _audioPlayer
-                            .seek(Duration(milliseconds: value.toInt()));
+                        _audioPlayer.seek(Duration(milliseconds: value.toInt()));
                       },
                       min: 0.0,
-                      max: _audioPlayer.duration?.inMilliseconds.toDouble() ??
-                          3.0,
+                      max: max,
                       onChanged: (value) {},
                     );
                   },
@@ -184,11 +187,10 @@ class _Player extends State<Player> {
                     stream: _audioPlayer.positionStream,
                     builder: (context, snapshot) {
                       Duration progress = snapshot.data ?? const Duration();
-
                       String sDuration =
                           "${_audioPlayer.duration?.inMinutes.remainder(60)}:${(_audioPlayer.duration?.inSeconds.remainder(60))}";
                       return Text(
-                        "${progress.inMinutes.remainder(60)}: ${progress.inSeconds.remainder(60)} / $sDuration",
+                        "${progress.inMinutes.remainder(60)}: ${progress.inSeconds.remainder(60)} / $max",
                         style: const TextStyle(color: Colors.white),
                       );
                     }),

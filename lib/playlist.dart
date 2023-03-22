@@ -71,7 +71,12 @@ class _PlaylistListState extends State<PlaylistList> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Spacer(),
-                    Container(child: Text(playlistList[0].name, style: const TextStyle(color: Colors.white),),),
+                    Container(
+                      child: Text(
+                        playlistList[0].name,
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ),
                     SizedBox(
                       height: 200,
                       child: ListView.builder(
