@@ -2,13 +2,12 @@
 
 import 'dart:async';
 import 'dart:developer';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:siri_wave/siri_wave.dart';
 import 'package:streamer/repository/MusicBrainz/mbid.dart';
 
 class Player extends StatefulWidget {
@@ -34,7 +33,6 @@ class _Player extends State<Player> {
   bool _isPlaying = false;
   late ScrollController _scrollController;
   String songURL = "";
-  bool isAlbumArtLoading = true;
 
   @override
   void initState() {
@@ -69,41 +67,42 @@ class _Player extends State<Player> {
     await _audioPlayer.pause();
   }
 
+  ///////////////////////////////////////////////////////////////////////////////////////////////
+  Future<String> getURL() async {
+    String mBid = await fetchMBID(widget.album, widget.artist) ?? "";
+    songURL = await fetchAlbumArtURL(mBid) ?? "";
+    return songURL;
+  }
+
   Future<Widget> getImageData() async {
-    String mbid = await fetchMBID(widget.album, widget.artist) ?? "";
-    songURL = await fetchAlbumArtURL(mbid) ?? "";
-    if (songURL != "") {
-      isAlbumArtLoading = false;
-    }
+    String mBid = await fetchMBID(widget.album, widget.artist) ?? "";
+    songURL = await fetchAlbumArtURL(mBid) ?? "";
+
     if (songURL == "") {
-      return const Icon(
-        Icons.question_mark_outlined,
-        color: Colors.grey,
-        size: 24.0,
-      );
+      return Image.asset('./assets/vinyl record.webp');
     } else {
       return Image.network(songURL);
     }
   }
 
   FutureBuilder albumArt() {
-    return FutureBuilder(
-      future: getImageData(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return snapshot.data as Widget;
-        } else {
-          return Center(
-            child: LoadingAnimationWidget.staggeredDotsWave(
-              // LoadingAnimationwidget that call the
-              color: Colors.green, // staggereddotwave animation
-              size: 50,
-            ),
-          );
-        }
-      },
-    );
-  }
+      return FutureBuilder(
+        future: getImageData(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return snapshot.data as Widget;
+          } else {
+            return Center(
+              child: LoadingAnimationWidget.staggeredDotsWave(
+                // LoadingAnimationWidget that call the
+                color: Colors.green, // staggeredDotsWave animation
+                size: 50,
+              ),
+            );
+          }
+        },
+      );
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +122,7 @@ class _Player extends State<Player> {
           ]),
         ),
         child:
-            Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+        Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
           const Padding(padding: EdgeInsets.all(16.0)),
           // Album cover
           Padding(
@@ -132,7 +131,14 @@ class _Player extends State<Player> {
               width: MediaQuery.of(context).size.width * 0.9,
               height: MediaQuery.of(context).size.height / 3,
               child: Center(
-                child: albumArt(),
+                child: CachedNetworkImage (
+                  imageUrl: getURL.toString(),
+                  placeholder: (context, url) => LoadingAnimationWidget.staggeredDotsWave(
+                    color: Colors.green,
+                    size: 50,
+                  ),
+                  errorWidget: (context, url, error) => Image.asset('./assets/vinyl record.webp'),
+                ),
               ),
             ),
           ),
@@ -191,7 +197,7 @@ class _Player extends State<Player> {
                         "${progress.inMinutes.remainder(60)}: ${progress.inSeconds.remainder(60)} / $sDuration",
                         style: const TextStyle(color: Colors.white),
                       );
-                    }),
+                }),
               ),
             ],
           ),
