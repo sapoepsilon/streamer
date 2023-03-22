@@ -9,6 +9,9 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:streamer/repository/MusicBrainz/mbid.dart';
+import 'package:streamer/utils/shared_preferences.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 
 class Player extends StatefulWidget {
   final String url;
@@ -70,9 +73,36 @@ class _Player extends State<Player> {
   ///////////////////////////////////////////////////////////////////////////////////////////////
   Future<String> getURL() async {
     String mBid = await fetchMBID(widget.album, widget.artist) ?? "";
-    songURL = await fetchAlbumArtURL(mBid) ?? "";
+    setState(() async {
+      songURL = await fetchAlbumArtURL(mBid) ?? "";
+    });
+    debugPrint("songURL: $songURL");
     return songURL;
   }
+
+  Future<void> cacheImage() async {
+
+    final Directory temp = await getTemporaryDirectory();
+    final File imageFile = File('${temp.path}/images/someImageFile.png'); //
+
+    if (await imageFile.exists()) {
+    } else {
+    await imageFile.create(recursive: true);
+    }
+  }
+
+  Future<File> _fileFromImageUrl() async {
+    final response = await http.get(Uri.parse('https://example.com/xyz.jpg)');
+
+        final documentDirectory = await getApplicationDocumentsDirectory();
+
+    final file = File(join(documentDirectory.path, 'imagetest.png'));
+
+    file.writeAsBytesSync(response.bodyBytes);
+
+    return file;
+  }
+
 
   Future<Widget> getImageData() async {
     String mBid = await fetchMBID(widget.album, widget.artist) ?? "";
@@ -81,28 +111,30 @@ class _Player extends State<Player> {
     if (songURL == "") {
       return Image.asset('./assets/vinyl record.webp');
     } else {
+
+      saveImageName(songURL, true);
       return Image.network(songURL);
     }
   }
 
   FutureBuilder albumArt() {
-      return FutureBuilder(
-        future: getImageData(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return snapshot.data as Widget;
-          } else {
-            return Center(
-              child: LoadingAnimationWidget.staggeredDotsWave(
-                // LoadingAnimationWidget that call the
-                color: Colors.green, // staggeredDotsWave animation
-                size: 50,
-              ),
-            );
-          }
-        },
-      );
-    }
+    return FutureBuilder(
+      future: getImageData(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return snapshot.data as Widget;
+        } else {
+          return Center(
+            child: LoadingAnimationWidget.staggeredDotsWave(
+              // LoadingAnimationWidget that call the
+              color: Colors.green, // staggeredDotsWave animation
+              size: 50,
+            ),
+          );
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +154,7 @@ class _Player extends State<Player> {
           ]),
         ),
         child:
-        Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+            Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
           const Padding(padding: EdgeInsets.all(16.0)),
           // Album cover
           Padding(
@@ -131,14 +163,18 @@ class _Player extends State<Player> {
               width: MediaQuery.of(context).size.width * 0.9,
               height: MediaQuery.of(context).size.height / 3,
               child: Center(
-                child: CachedNetworkImage (
-                  imageUrl: getURL.toString(),
-                  placeholder: (context, url) => LoadingAnimationWidget.staggeredDotsWave(
-                    color: Colors.green,
-                    size: 50,
-                  ),
-                  errorWidget: (context, url, error) => Image.asset('./assets/vinyl record.webp'),
-                ),
+                child: songURL == ""
+                    ? LoadingAnimationWidget.staggeredDotsWave(
+                        color: Colors.green,
+                        size: 50,
+                      )
+                    : CachedNetworkImage(
+                        imageUrl: songURL,
+                        placeholder: (context, url) =>
+                            Image.asset('./assets/vinyl record.webp'),
+                        errorWidget: (context, url, error) =>
+                            Image.asset('./assets/vinyl record.webp'),
+                      ),
               ),
             ),
           ),
@@ -197,7 +233,7 @@ class _Player extends State<Player> {
                         "${progress.inMinutes.remainder(60)}: ${progress.inSeconds.remainder(60)} / $sDuration",
                         style: const TextStyle(color: Colors.white),
                       );
-                }),
+                    }),
               ),
             ],
           ),

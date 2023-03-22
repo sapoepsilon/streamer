@@ -32,3 +32,15 @@ Future<bool> getBool(String key) async {
   final prefs = await SharedPreferences.getInstance();
   return prefs.getBool(key) ?? false;
 }
+
+// Determin if image is saved
+Future<bool> isImageSaved(String key) async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.containsKey(key);
+}
+
+// save image name to shared preferences
+void saveImageName(String key, bool isSaved) async {
+  final prefs = await SharedPreferences.getInstance();
+  prefs.setBool(key, isSaved);
+}
