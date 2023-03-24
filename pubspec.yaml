@@ -53,6 +53,7 @@ dependencies:
   just_audio_background: ^0.0.1-beta.9
   flutter_audio_waveforms: ^1.2.1+8
   siri_wave: ^0.2.2
+  cached_network_image: ^3.2.3
 
 dev_dependencies:
   flutter_test:
@@ -76,6 +77,8 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  assets:
+    - assets/
   # To add assets to your application, add an assets section, like this:
 
 

@@ -22,7 +22,7 @@ This project is a Flutter application that can be integrated with Figma and VSCo
 
 # Installation
 
-Make sure that preruquistes have been met. Run in terminal:
+Make sure that prerequisites have been met. Run in terminal:
 
 ```
 flutter doctor
