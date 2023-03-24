@@ -36,6 +36,7 @@ class _Player extends State<Player> {
   bool _isPlaying = false;
   late ScrollController _scrollController;
   String songURL = "";
+  bool hasCachedArt = false;
 
   @override
   void initState() {
@@ -71,13 +72,12 @@ class _Player extends State<Player> {
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////////////
-  Future<String> getURL() async {
+  Future getURL() async {
     String mBid = await fetchMBID(widget.album, widget.artist) ?? "";
     setState(() async {
       songURL = await fetchAlbumArtURL(mBid) ?? "";
     });
     debugPrint("songURL: $songURL");
-    return songURL;
   }
 
   Future<void> cacheImage() async {
@@ -91,17 +91,17 @@ class _Player extends State<Player> {
     }
   }
 
-  Future<File> _fileFromImageUrl() async {
-    final response = await http.get(Uri.parse('https://example.com/xyz.jpg)');
-
-        final documentDirectory = await getApplicationDocumentsDirectory();
-
-    final file = File(join(documentDirectory.path, 'imagetest.png'));
-
-    file.writeAsBytesSync(response.bodyBytes);
-
-    return file;
-  }
+  // Future<File> _fileFromImageUrl() async {
+  //   final response = await http.get(Uri.parse('https://example.com/xyz.jpg)');
+  //
+  //       final documentDirectory = await getApplicationDocumentsDirectory();
+  //
+  //   final file = File(join(documentDirectory.path, 'imagetest.png'));
+  //
+  //   file.writeAsBytesSync(response.bodyBytes);
+  //
+  //   return file;
+  // }
 
 
   Future<Widget> getImageData() async {
@@ -136,6 +136,51 @@ class _Player extends State<Player> {
     );
   }
 
+  FutureBuilder getAlbumArt() {
+    return FutureBuilder(
+      builder: (context, snapshot) {
+        if (songURL == "" && !hasCachedArt) {
+          getURL();
+          hasCachedArt = true;
+          return Center(
+            child: LoadingAnimationWidget.staggeredDotsWave(
+              color: Colors.green,
+              size: 50,
+            ),
+          );
+        } else {
+          return CachedNetworkImage(
+            imageUrl: songURL,
+            placeholder: (context, url) =>
+                Image.asset('./assets/vinyl record.webp'),
+            errorWidget: (context, url, error) =>
+                Image.asset('./assets/vinyl record.webp'),
+          );
+        }
+      },
+    );
+  }
+
+  Future<Widget> get1AlbumArt() async {
+    if (songURL == "" && !hasCachedArt) {
+      songURL = await getURL();
+      hasCachedArt = true;
+      return LoadingAnimationWidget.staggeredDotsWave(
+        color: Colors.green,
+        size: 50,
+      );
+    } else {
+      return CachedNetworkImage(
+        imageUrl: songURL,
+        placeholder: (context, url) =>
+            Image.asset('./assets/vinyl record.webp'),
+        errorWidget: (context, url, error) =>
+            Image.asset('./assets/vinyl record.webp'),
+      );
+    }
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
@@ -163,18 +208,7 @@ class _Player extends State<Player> {
               width: MediaQuery.of(context).size.width * 0.9,
               height: MediaQuery.of(context).size.height / 3,
               child: Center(
-                child: songURL == ""
-                    ? LoadingAnimationWidget.staggeredDotsWave(
-                        color: Colors.green,
-                        size: 50,
-                      )
-                    : CachedNetworkImage(
-                        imageUrl: songURL,
-                        placeholder: (context, url) =>
-                            Image.asset('./assets/vinyl record.webp'),
-                        errorWidget: (context, url, error) =>
-                            Image.asset('./assets/vinyl record.webp'),
-                      ),
+                child: albumArt(),
               ),
             ),
           ),
