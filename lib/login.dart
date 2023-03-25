@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:streamer/helpers/globals.dart';
-import 'package:streamer/home.dart';
 import 'package:streamer/helpers/helpers.dart';
 import 'package:streamer/pages/Songs_List.dart';
 import 'package:streamer/subsonic/context.dart';
@@ -71,6 +70,8 @@ class _Login extends State<Login> {
                   ],
                   radius: .8,
                 )),
+                child: Center (
+                child: SingleChildScrollView (
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -85,22 +86,24 @@ class _Login extends State<Login> {
                       height: screenSize.height * 0.15,
                     ),
                     field(isTablet, screenSize, _server,
-                        "http://89.207.132.170:4533", _getServerValuetext),
+                        "http://89.207.132.170:4533", _getServerValueText),
                     textFieldSpacer(screenSize),
                     field(
-                        isTablet, screenSize, _name, "Name", _getNameValuetext),
+                        isTablet, screenSize, _name, "Name", _getNameValueText),
                     textFieldSpacer(screenSize),
                     field(isTablet, screenSize, _username, "Username",
-                        _getUsernameValuetext),
+                        _getUsernameValueText),
                     textFieldSpacer(screenSize),
                     field(isTablet, screenSize, _password, "Password",
-                        _getPasswordValuetext, true),
+                        _getPasswordValueText, true),
                     textFieldSpacer(screenSize),
                     rememberMe(isTablet, screenSize),
-                    conect(isTablet, screenSize)
-                    // buildforgotPassBtn(),
+                    connect(isTablet, screenSize)
+                    // buildForgotPassBtn(),
                   ],
                 ),
+                ),
+              ),
               ),
             ],
           ),
@@ -111,9 +114,9 @@ class _Login extends State<Login> {
 
   void checkCredentials() async {
     if (await getBool(isLoggedInKey)) {
-      final savedCredentiais = await getCredentials();
+      final savedCredentials = await getCredentials();
       setState(() {
-        savedCredentiais.forEach((key, value) {
+        savedCredentials.forEach((key, value) {
           if (key == "username") {
             _username = value;
           } else if (key == "password") {
@@ -163,25 +166,25 @@ class _Login extends State<Login> {
     }
   }
 
-  void _getServerValuetext(String value) {
+  void _getServerValueText(String value) {
     setState(() {
       _server = value;
     });
   }
 
-  void _getNameValuetext(String value) {
+  void _getNameValueText(String value) {
     setState(() {
       _name = value;
     });
   }
 
-  void _getUsernameValuetext(String value) {
+  void _getUsernameValueText(String value) {
     setState(() {
       _username = value;
     });
   }
 
-  void _getPasswordValuetext(String value) {
+  void _getPasswordValueText(String value) {
     setState(() {
       _password = value;
     });
@@ -218,7 +221,7 @@ class _Login extends State<Login> {
     );
   }
 
-  Widget conect(bool isTablet, Size screenSize) {
+  Widget connect(bool isTablet, Size screenSize) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 25),
       width: isTablet ? 500 : screenSize.width * 0.8,
@@ -236,7 +239,7 @@ class _Login extends State<Login> {
         },
         onPressed: _connectToServer,
         child: const Text(
-          "Conect",
+          "Connect",
           style: TextStyle(
             color: Colors.white,
             fontSize: 20,

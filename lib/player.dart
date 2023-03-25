@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:siri_wave/siri_wave.dart';
 import 'package:streamer/repository/MusicBrainz/mbid.dart';
 
 class Player extends StatefulWidget {
@@ -70,8 +69,8 @@ class _Player extends State<Player> {
   }
 
   Future<Widget> getImageData() async {
-    String mbid = await fetchMBID(widget.album, widget.artist) ?? "";
-    songURL = await fetchAlbumArtURL(mbid) ?? "";
+    String mBid = await fetchMBID(widget.album, widget.artist) ?? "";
+    songURL = await fetchAlbumArtURL(mBid) ?? "";
     if (songURL != "") {
       isAlbumArtLoading = false;
     }
@@ -95,8 +94,8 @@ class _Player extends State<Player> {
         } else {
           return Center(
             child: LoadingAnimationWidget.staggeredDotsWave(
-              // LoadingAnimationwidget that call the
-              color: Colors.green, // staggereddotwave animation
+              // LoadingAnimationWidget that call the
+              color: Colors.green, // staggeredDotWave animation
               size: 50,
             ),
           );
@@ -128,7 +127,7 @@ class _Player extends State<Player> {
           // Album cover
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Container(
+            child: SizedBox(
               width: MediaQuery.of(context).size.width * 0.9,
               height: MediaQuery.of(context).size.height / 3,
               child: Center(
