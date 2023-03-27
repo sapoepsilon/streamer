@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:streamer/helpers/custom_models/playing_song.dart';
 import 'package:streamer/player.dart';
 import 'package:streamer/subsonic/requests/download.dart';
 import 'package:streamer/subsonic/requests/get_album.dart';
@@ -74,7 +75,7 @@ class _SongsList extends State<SongsList> {
 
   Future<List<SongResult>> _fetchAllSongs() async {
     final albumList = await GetAlbumList2(
-            type: GetAlbumListType.alphabeticalByArtist, size: 500)
+        type: GetAlbumListType.alphabeticalByArtist, size: 500)
         .run(widget.subSonicContext)
         .catchError((err) {
       debugPrint('error: network issue? $err');
@@ -111,124 +112,164 @@ class _SongsList extends State<SongsList> {
         }
       }
     }
-
     songList.sort();
     setState(() {});
     return songList;
   }
 
-  Future<void> play(
-      String songID, String album, String artist, String title) async {
+  Future<void> playFullScreenPlayer(String songID, String album, String artist,
+      String title) async {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => Player(
-          url: songID,
-          key: null,
-          album: album,
-          artist: artist,
-          title: title,
-        ),
+        builder: (context) =>
+            Player(
+              url: songID,
+              key: null,
+              album: album,
+              artist: artist,
+              title: title,
+              isMiniPlayer: false,
+            ),
       ),
     );
   }
 
+  Widget playMiniPlayer({required String songID, required String album, required String artist,
+      required String title}) {
+    return  Container(
+      height: 100,
+      child: Player(url: songID,
+        title: title,
+        artist: artist,
+        album: album,
+        isMiniPlayer: true),);
+  }
+
   @override
   Widget build(BuildContext context) {
+    PlayingSong? playingSong;
+    bool isMiniPlayer = true;
     return Scaffold(
-      extendBody: true,
-      backgroundColor: Colors.transparent,
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Colors.teal,
-              Colors.black,
-            ],
+        extendBody: true,
+        backgroundColor: Colors.transparent,
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Colors.teal,
+                Colors.black,
+              ],
+            ),
+          ),
+          child: Column(
+            children: [
+          Expanded(
+          child: ListView.builder(
+          itemCount: songList.length,
+            itemBuilder: (context, index) {
+              var title = songList[index].title;
+              var subtitle = songList[index].artistName;
+              return Container(
+                margin: const EdgeInsets.only(
+                    top: 8.0, left: 10.0, right: 10.0),
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(0, 0, 0, 0.3),
+                  borderRadius: BorderRadius.circular(25.0),
+                  border: Border.all(
+                    color: Colors.black,
+                    width: 1.0,
+                  ),
+                ),
+                child: ListTile(
+                  visualDensity: const VisualDensity(vertical: -3),
+                  key: ValueKey(songList[index]),
+                  // to compact
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.download),
+                        color: Colors.white,
+                        onPressed: () {
+                          DownloadItem(songList[index].id)
+                              .run(widget.subSonicContext);
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.favorite,
+                          color: songList[index].starred
+                              ? Colors.red
+                              : Colors.white,
+                        ),
+                        color: Colors.white,
+                        onPressed: () {
+                          setState(() {
+                            songList[index].starred
+                                ? UnstarItem(
+                                id: SongId(
+                                    songId: songList[index].id))
+                                .run(widget.subSonicContext)
+                                : StarItem(
+                                id: SongId(
+                                    songId: songList[index].id))
+                                .run(widget.subSonicContext);
+                          });
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.play_arrow_rounded),
+                        color: Colors.white,
+                        onPressed: () {
+                          setState(() {
+                            playingSong = PlayingSong(
+                                songID: songList[index].id,
+                                title: songList[index].title,
+                                artist: songList[index].artistName,
+                                album: songList[index].albumName,
+                                isMiniPlayer: true);
+                            isMiniPlayer = true;
+                            debugPrint("song should be playing: $isMiniPlayer");
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  textColor: const Color.fromARGB(204, 11, 170, 14),
+                  title: Text(
+                    title,
+                    style: const TextStyle(overflow: TextOverflow.ellipsis),
+                  ),
+                  subtitle: Text(
+                    subtitle,
+                    style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 12.0,
+                        overflow: TextOverflow.ellipsis),
+                  ),
+                  leading: albumArt(songList[index]),
+                  onTap: () async {
+                    // await player.pause();
+                    final streamURL = StreamItem(
+                        songList[index].id.toString(),
+                        streamFormat: StreamFormat.mp3)
+                        .getDownloadUrl(widget.subSonicContext);
+                    final artist = songList[index].artistName;
+                    final album = songList[index].albumName;
+                    final title = songList[index].title;
+                    playFullScreenPlayer(streamURL, album, artist, title);
+                  },
+                ),
+              );
+            },
           ),
         ),
-        child: ListView.builder(
-          itemCount: songList.length,
-          itemBuilder: (context, index) {
-            var title = songList[index].title;
-            var subtitle = songList[index].artistName;
-            return Container(
-              margin: const EdgeInsets.only(top: 8.0, left: 10.0, right: 10.0),
-              decoration: BoxDecoration(
-                color: const Color.fromRGBO(0, 0, 0, 0.3),
-                borderRadius: BorderRadius.circular(25.0),
-                border: Border.all(
-                  color: Colors.black,
-                  width: 1.0,
-                ),
-              ),
-              child: ListTile(
-                visualDensity: const VisualDensity(vertical: -3),
-                key: ValueKey(songList[index]),
-                // to compact
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.download),
-                      color: Colors.white,
-                      onPressed: () {
-                        DownloadItem(songList[index].id)
-                            .run(widget.subSonicContext);
-                      },
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        Icons.favorite,
-                        color:
-                            songList[index].starred ? Colors.red : Colors.white,
-                      ),
-                      color: Colors.white,
-                      onPressed: () {
-                        setState(() {
-                          songList[index].starred
-                              ? UnstarItem(
-                                      id: SongId(songId: songList[index].id))
-                                  .run(widget.subSonicContext)
-                              : StarItem(id: SongId(songId: songList[index].id))
-                                  .run(widget.subSonicContext);
-                        });
-                      },
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.more_horiz),
-                      color: Colors.white,
-                      onPressed: () {},
-                    ),
-                  ],
-                ),
-                textColor: const Color.fromARGB(204, 11, 170, 14),
-                title: Text(
-                  title,
-                  style: const TextStyle(overflow: TextOverflow.ellipsis),
-                ),
-                subtitle: Text(
-                  subtitle,
-                  style: const TextStyle(
-                      color: Colors.white70,
-                      fontSize: 12.0,
-                      overflow: TextOverflow.ellipsis),
-                ),
-                leading: albumArt(songList[index]),
-                onTap: () async {
-                  // await player.pause();
-                  final streamURL = StreamItem(songList[index].id.toString(),
-                          streamFormat: StreamFormat.mp3)
-                      .getDownloadUrl(widget.subSonicContext);
-                  final artist = songList[index].artistName;
-                  final album = songList[index].albumName;
-                  final title = songList[index].title;
-                  play(streamURL, album, artist, title);
-                },
-              ),
-            );
-          },
-        ),
-      ),
+        isMiniPlayer ? playMiniPlayer(songID: playingSong?.songID ?? "", album: playingSong?.album ?? "", artist: playingSong?.artist ?? "", title: playingSong?.title ?? "") : const SizedBox.shrink(),]
+    ,
+    )
+    ,
+    )
+    ,
     );
   }
 }

@@ -15,13 +15,14 @@ class Player extends StatefulWidget {
   final String title;
   final String artist;
   final String album;
+  final bool isMiniPlayer;
 
   const Player(
       {Key? key,
       required this.url,
       required this.title,
       required this.artist,
-      required this.album})
+      required this.album, required this.isMiniPlayer})
       : super(key: key);
 
   @override
@@ -91,28 +92,8 @@ class _Player extends State<Player> {
     }
   }
 
-  FutureBuilder albumArt() {
-    return FutureBuilder(
-      future: getImageData(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return snapshot.data as Widget;
-        } else {
-          return Center(
-            child: LoadingAnimationWidget.staggeredDotsWave(
-              // LoadingAnimationwidget that call the
-              color: Colors.green, // staggereddotwave animation
-              size: 50,
-            ),
-          );
-        }
-      },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return PlatformScaffold(
+  Widget fullPlayer() {
+    return  PlatformScaffold(
       appBar: PlatformAppBar(
         backgroundColor: Colors.transparent,
         title: const Text(
@@ -128,7 +109,7 @@ class _Player extends State<Player> {
           ]),
         ),
         child:
-            Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+        Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
           const Padding(padding: EdgeInsets.all(16.0)),
           // Album cover
           Padding(
@@ -221,7 +202,7 @@ class _Player extends State<Player> {
                     return MaterialElevatedButtonData(
                       style: ButtonStyle(
                           backgroundColor:
-                              MaterialStateProperty.all(Colors.teal),
+                          MaterialStateProperty.all(Colors.teal),
                           shape: MaterialStateProperty.all<CircleBorder>(
                               const CircleBorder())),
                     );
@@ -263,5 +244,91 @@ class _Player extends State<Player> {
         ]),
       ),
     );
+  }
+
+  Widget miniPlayer() {
+    return SizedBox(
+      // 5th of the screen height
+      height: MediaQuery.of(context).size.height / 5,
+      width: MediaQuery.of(context).size.width,
+      child: Row(
+        // leading album art
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              width: MediaQuery.of(context).size.width / 5,
+              height: MediaQuery.of(context).size.height / 5,
+              child: albumArt(),
+            ),
+          ),
+          // Song title and artist
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(
+                  widget.title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
+                ),
+                Text(
+                  widget.artist,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Play/pause button
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+              icon: Icon(
+                _isPlaying ? Icons.pause : Icons.play_arrow,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                setState(() {
+                  if (_isPlaying) {
+                    _pause();
+                  } else {
+                    _play();
+                  }
+                });
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  FutureBuilder albumArt() {
+    return FutureBuilder(
+      future: getImageData(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return snapshot.data as Widget;
+        } else {
+          return Center(
+            child: LoadingAnimationWidget.staggeredDotsWave(
+              // LoadingAnimationwidget that call the
+              color: Colors.green, // staggereddotwave animation
+              size: 50,
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.isMiniPlayer ? miniPlayer() : fullPlayer();
   }
 }
