@@ -69,8 +69,8 @@ class _Player extends State<Player> {
   }
 
   Future<Widget> getImageData() async {
-    String mBid = await fetchMBID(widget.album, widget.artist) ?? "";
-    songURL = await fetchAlbumArtURL(mBid) ?? "";
+    String mbid = await fetchMBID(widget.album, widget.artist) ?? "";
+    songURL = await fetchAlbumArtURL(mbid) ?? "";
     if (songURL != "") {
       isAlbumArtLoading = false;
     }
