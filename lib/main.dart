@@ -24,6 +24,14 @@ class MyApp extends StatelessWidget {
             ),
           );
         },
+        material: (context, platform) {
+          return MaterialAppData(
+             theme: ThemeData(
+             primarySwatch: Colors.blue,
+              scaffoldBackgroundColor: const Color.fromARGB(0, 0, 0, 0), //<-- SEE HERE
+    ),
+          );
+        },
         localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
           DefaultMaterialLocalizations.delegate,
           DefaultWidgetsLocalizations.delegate,
