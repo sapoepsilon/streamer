@@ -1,16 +1,14 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:streamer/helpers/globals.dart';
-import 'package:streamer/home.dart';
 import 'package:streamer/helpers/helpers.dart';
-import 'package:streamer/pages/Songs_List.dart';
 import 'package:streamer/subsonic/context.dart';
 import 'package:streamer/subsonic/requests/ping.dart';
 import 'package:streamer/subsonic/response.dart';
 import 'package:streamer/utils/shared_preferences.dart';
+
+import 'package:streamer/navigation.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -98,7 +96,6 @@ class _Login extends State<Login> {
                     textFieldSpacer(screenSize),
                     rememberMe(isTablet, screenSize),
                     conect(isTablet, screenSize)
-                    // buildforgotPassBtn(),
                   ],
                 ),
               ),
@@ -128,7 +125,6 @@ class _Login extends State<Login> {
   }
 
   void _connectToServer() async {
-    // ignore: unused_local_variable
     debugPrint("server: $_server");
     String errorMessage = "";
     final ctx = SubsonicContext(
@@ -150,15 +146,10 @@ class _Login extends State<Login> {
 
     if (pong.status == ResponseStatus.ok) {
       saveCredentials(_username, _password, _server);
-      // ignore: todo
-      // TODO: move methods with context out of Async method
-      // ignore: use_build_context_synchronously
       Navigator.of(context).push(platformPageRoute(
-          builder: (context) => SongsList(subSonicContext: ctx),
-          // ignore: todo
-          context: context)); //TODO: do not use Navigator in async method
+          builder: (context) => Navigation(subSonicContext: ctx),
+          context: context));
     } else {
-      // ignore: use_build_context_synchronously
       showErrorDialog(context, errorMessage);
     }
   }
@@ -236,7 +227,7 @@ class _Login extends State<Login> {
         },
         onPressed: _connectToServer,
         child: const Text(
-          "Conect",
+          "Connect",
           style: TextStyle(
             color: Colors.white,
             fontSize: 20,

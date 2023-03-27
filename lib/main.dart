@@ -6,7 +6,7 @@ import 'package:streamer/utils/service_locator.dart';
 import 'audio_handler.dart';
 import 'login.dart';
 
-void main()  {
+void main() {
   runApp(const MyApp());
 }
 
@@ -22,6 +22,14 @@ class MyApp extends StatelessWidget {
             theme: const CupertinoThemeData(
               textTheme: CupertinoTextThemeData(),
             ),
+          );
+        },
+        material: (context, platform) {
+          return MaterialAppData(
+             theme: ThemeData(
+             primarySwatch: Colors.blue,
+              scaffoldBackgroundColor: const Color.fromARGB(0, 0, 0, 0),
+    ),
           );
         },
         localizationsDelegates: const <LocalizationsDelegate<dynamic>>[

@@ -1,5 +1,3 @@
-// ignore_for_file: invalid_return_type_for_catch_error, prefer_typing_uninitialized_variables, unused_field
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
@@ -135,58 +133,10 @@ class _SongsList extends State<SongsList> {
     );
   }
 
-  BottomAppBar _buildBottomNavigationBar() {
-    return BottomAppBar(
-      color: const Color.fromRGBO(0, 0, 0, 0.5),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.home_outlined,
-              color: Colors.white,
-              size: 40,
-            ),
-            //color: Colors.black,
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.search_outlined,
-              color: Colors.white,
-              size: 40,
-            ),
-            color: Colors.white,
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              isCupertino(context) ? CupertinoIcons.heart : Icons.hearing_sharp,
-              color: Colors.white,
-              size: 40,
-            ),
-            color: Colors.black,
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.person_outlined,
-              color: Colors.white,
-              size: 40,
-            ),
-            color: Colors.black,
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      bottomNavigationBar: _buildBottomNavigationBar(),
       backgroundColor: Colors.transparent,
       body: Container(
         decoration: const BoxDecoration(
