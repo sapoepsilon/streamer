@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:streamer/home.dart';
 import 'package:streamer/pages/Songs_List.dart';
 import 'package:streamer/subsonic/subsonic.dart';
@@ -56,7 +55,7 @@ class _Navigation extends State<Navigation> {
               child: BottomNavigationBar(
                 elevation: 0,
                 type: BottomNavigationBarType.fixed,
-                backgroundColor: Color.fromARGB(150, 155, 40, 175),
+                backgroundColor: const Color.fromARGB(150, 155, 40, 175),
                 currentIndex: _selectedTab,
                 onTap: (index) => _changeTab(index),
                 selectedItemColor: Colors.white,
