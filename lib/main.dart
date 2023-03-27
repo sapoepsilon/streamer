@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
           return MaterialAppData(
              theme: ThemeData(
              primarySwatch: Colors.blue,
-              scaffoldBackgroundColor: const Color.fromARGB(0, 0, 0, 0), //<-- SEE HERE
+              scaffoldBackgroundColor: const Color.fromARGB(0, 0, 0, 0),
     ),
           );
         },

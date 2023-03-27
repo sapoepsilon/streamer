@@ -96,7 +96,6 @@ class _Login extends State<Login> {
                     textFieldSpacer(screenSize),
                     rememberMe(isTablet, screenSize),
                     conect(isTablet, screenSize)
-                    // buildforgotPassBtn(),
                   ],
                 ),
               ),
@@ -126,7 +125,6 @@ class _Login extends State<Login> {
   }
 
   void _connectToServer() async {
-    // ignore: unused_local_variable
     debugPrint("server: $_server");
     String errorMessage = "";
     final ctx = SubsonicContext(
@@ -148,17 +146,10 @@ class _Login extends State<Login> {
 
     if (pong.status == ResponseStatus.ok) {
       saveCredentials(_username, _password, _server);
-      // ignore: todo
-      // TODO: move methods with context out of Async method
-      // ignore: use_build_context_synchronously
       Navigator.of(context).push(platformPageRoute(
-          //builder: (context) => SongsList(subSonicContext: ctx),
-          // COMMENT LINE ABOVE AND UNCOMMENT LINE BELOW FOR GLOBAL NAV
           builder: (context) => Navigation(subSonicContext: ctx),
-          // ignore: todo
-          context: context)); //TODO: do not use Navigator in async method
+          context: context));
     } else {
-      // ignore: use_build_context_synchronously
       showErrorDialog(context, errorMessage);
     }
   }
