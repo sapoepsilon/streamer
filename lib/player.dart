@@ -8,20 +8,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:streamer/artist.dart';
 import 'package:streamer/repository/MusicBrainz/mbid.dart';
+import 'package:streamer/subsonic/context.dart';
 
 class Player extends StatefulWidget {
   final String url;
   final String title;
   final String artist;
   final String album;
+  final SubsonicContext ctx;
 
   const Player(
       {Key? key,
       required this.url,
       required this.title,
       required this.artist,
-      required this.album})
+      required this.album, required this.ctx})
       : super(key: key);
 
   @override
@@ -152,10 +155,27 @@ class _Player extends State<Player> {
                     fontSize: 24,
                     color: Colors.white),
               ),
+            TextButton(child: Text(widget.artist),onPressed:() {
+                try {
+
+                    Navigator.of(context).push( MaterialPageRoute (builder:
+                     (context) => ArtistPage(subSonicContext: widget.ctx,)));
+                    } catch(error) {
+                      debugPrint("Couldn't navigate due to ${error}");
+                    }   
+            },),
+            
+              /*
               PlatformText(
                 widget.artist,
                 style: const TextStyle(fontSize: 18, color: Colors.white),
               ),
+
+              onTap:(
+                  Navigator.of(context).push( MaterialPageRoute (builder: (context) => ArtistPage()));
+                ),
+              */
+
             ],
           ),
 

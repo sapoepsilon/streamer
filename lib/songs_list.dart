@@ -127,6 +127,7 @@ class _SongsList extends State<SongsList> {
           album: album,
           artist: artist,
           title: title,
+          ctx: widget.subSonicContext,
         ),
       ),
     );
