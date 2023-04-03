@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:streamer/helpers/colors.dart';
 import 'package:streamer/player.dart';
 import 'package:streamer/subsonic/requests/download.dart';
 import 'package:streamer/subsonic/requests/get_album.dart';
@@ -203,10 +204,28 @@ class _SongsList extends State<SongsList> {
                         });
                       },
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.more_horiz),
-                      color: Colors.white,
-                      onPressed: () {},
+                    PopupMenuButton<String>(
+                      icon: const Icon(
+                        Icons.more_vert,
+                        color: Color.fromARGB(255, 253, 253, 253),
+                      ),
+                      color: testColor,
+                      onSelected: (value) => handleClick(value),
+                      itemBuilder: (BuildContext context) {
+                        return {
+                          'Add to Playlist',
+                          'Go to album',
+                          'Go to Artist',
+                          'Show Credits',
+                          'Share'
+                        }.map((String choice) {
+                          return PopupMenuItem<String>(
+                            value: choice,
+                            child: Text(choice),
+                          );
+                        }).toList();
+                      },
+                      offset: const Offset(0, 40),
                     ),
                   ],
                 ),
@@ -241,5 +260,20 @@ class _SongsList extends State<SongsList> {
         ),
       ),
     );
+  }
+}
+
+void handleClick(String value) {
+  switch (value) {
+    case 'Add to Playlist':
+      break;
+    case 'Go to album':
+      break;
+    case 'Go to Artist':
+      break;
+    case 'Show Credits':
+      break;
+    case 'Share':
+      break;
   }
 }
