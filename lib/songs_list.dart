@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:miniplayer/miniplayer.dart';
+import 'package:streamer/helpers/colors.dart';
 import 'package:streamer/helpers/custom_models/playing_song.dart';
 import 'package:streamer/player.dart';
 import 'package:streamer/subsonic/requests/download.dart';
@@ -125,7 +126,9 @@ class _SongsList extends State<SongsList> {
     return Miniplayer(
         minHeight: 70,
         maxHeight: MediaQuery.of(context).size.height,
-        valueNotifier: playingSong.isMiniPlayer == true ?  ValueNotifier(MediaQuery.of(context).size.height) : ValueNotifier(70.0),
+        valueNotifier: playingSong.isMiniPlayer == true
+            ? ValueNotifier(MediaQuery.of(context).size.height)
+            : ValueNotifier(70.0),
         builder: (height, percentage) {
           debugPrint("percentage $percentage");
           debugPrint("value notifier: ${height}}");
@@ -206,14 +209,6 @@ class _SongsList extends State<SongsList> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 IconButton(
-                                  icon: const Icon(Icons.download),
-                                  color: Colors.white,
-                                  onPressed: () {
-                                    DownloadItem(songList[index].id)
-                                        .run(widget.subSonicContext);
-                                  },
-                                ),
-                                IconButton(
                                   icon: Icon(
                                     Icons.favorite,
                                     color: songList[index].starred
@@ -258,6 +253,29 @@ class _SongsList extends State<SongsList> {
                                     });
                                   },
                                 ),
+                                PopupMenuButton<String>(
+                                  icon: const Icon(
+                                    Icons.more_vert,
+                                    color: Color.fromARGB(255, 253, 253, 253),
+                                  ),
+                                  color: contextMenuColor,
+                                  onSelected: (value) => handleClick(value),
+                                  itemBuilder: (BuildContext context) {
+                                    return {
+                                      'Add to Playlist',
+                                      'Go to album',
+                                      'Go to Artist',
+                                      'Show Credits',
+                                      'Share'
+                                    }.map((String choice) {
+                                      return PopupMenuItem<String>(
+                                        value: choice,
+                                        child: Text(choice),
+                                      );
+                                    }).toList();
+                                  },
+                                  offset: const Offset(0, 40),
+                                )
                               ],
                             ),
                             textColor: const Color.fromARGB(204, 11, 170, 14),
@@ -302,5 +320,20 @@ class _SongsList extends State<SongsList> {
             shouldPlay ? player(playingSong!) : const SizedBox.shrink()
           ],
         ));
+  }
+
+  void handleClick(String value) {
+    switch (value) {
+      case 'Add to Playlist':
+        break;
+      case 'Go to album':
+        break;
+      case 'Go to Artist':
+        break;
+      case 'Show Credits':
+        break;
+      case 'Share':
+        break;
+    }
   }
 }
