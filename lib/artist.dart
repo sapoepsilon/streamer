@@ -88,11 +88,14 @@ class SearchArtist extends SearchDelegate {
   @override
   Widget buildResults(BuildContext context) {
     List<String> matchquery = [];
+    /*
+    Still working on this part
     for (var _song in ) {
       if (title.toLowerCase().contains(query.toLowerCase())) {
         matchquery.add(title);
       }
     }
+    */
     return ListView.builder(
       itemCount: matchquery.length,
       itemBuilder: (context, index) {
@@ -100,6 +103,14 @@ class SearchArtist extends SearchDelegate {
         return ListTile(title: Text(result));
       },
     );
+  }
+  
+
+  //temp buildSuggestions, still needs work
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // TODO: implement buildSuggestions
+    throw UnimplementedError();
   }
 
 }

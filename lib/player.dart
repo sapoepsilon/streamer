@@ -159,7 +159,7 @@ class _Player extends State<Player> {
                 try {
 
                     Navigator.of(context).push( MaterialPageRoute (builder:
-                     (context) => ArtistSongs(subSonicContext: widget.ctx,widget.artist)));
+                     (context) => ArtistSongs(subSonicContext: widget.ctx, sArtist: widget.artist,)));
                     } catch(error) {
                       debugPrint("Couldn't navigate due to ${error}");
                     }   
