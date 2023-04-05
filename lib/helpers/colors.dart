@@ -1,3 +1,5 @@
 import 'dart:ui';
 
-Color testColor = Color.fromRGBO(255, 255, 255, 1);
+import 'package:flutter/material.dart';
+
+Color testColor = Colors.transparent;
