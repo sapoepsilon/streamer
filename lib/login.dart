@@ -142,7 +142,6 @@ class _Login extends State<Login> {
   }
 
   void _connectToServer() async {
-    // ignore: unused_local_variable
     debugPrint("server: $_server");
     String errorMessage = "";
     final ctx = SubsonicContext(
@@ -171,12 +170,11 @@ class _Login extends State<Login> {
       // ignore: todo
       // TODO: move methods with context out of Async method
       // ignore: use_build_context_synchronously
+
       Navigator.of(context).push(platformPageRoute(
           builder: (context) => Navigation(subSonicContext: ctx),
-          // ignore: todo
-          context: context)); //TODO: do not use Navigator in async method
+          context: context));
     } else {
-      // ignore: use_build_context_synchronously
       showErrorDialog(context, errorMessage);
     }
   }
