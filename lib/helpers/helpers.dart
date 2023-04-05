@@ -22,6 +22,8 @@ InputDecoration loginTextDecoration(String hintText) {
   );
 }
 
+bool shouldPlay = false;
+
 BoxDecoration loginTextFieldBackground() {
   return BoxDecoration(
       color: const Color.fromRGBO(0, 0, 0, .5),

@@ -22,7 +22,8 @@ class Player extends StatefulWidget {
       required this.url,
       required this.title,
       required this.artist,
-      required this.album, required this.isMiniPlayer})
+      required this.album,
+      required this.isMiniPlayer})
       : super(key: key);
 
   @override
@@ -39,6 +40,7 @@ class _Player extends State<Player> {
 
   @override
   void initState() {
+    debugPrint("Player url: ${widget.url}");
     super.initState();
     _setSong();
     _play();
@@ -47,7 +49,6 @@ class _Player extends State<Player> {
 
   @override
   void dispose() {
-    _audioPlayer.stop();
     super.dispose();
   }
 
@@ -93,157 +94,139 @@ class _Player extends State<Player> {
   }
 
   Widget fullPlayer() {
-    return  PlatformScaffold(
-      appBar: PlatformAppBar(
-        backgroundColor: Colors.transparent,
-        title: const Text(
-          'Now Playing',
-          style: TextStyle(color: Colors.white),
+    return Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+      const Padding(padding: EdgeInsets.all(16.0)),
+      // Album cover
+      Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Container(
+          width: MediaQuery.of(context).size.width * 0.9,
+          height: MediaQuery.of(context).size.height / 3,
+          child: Center(
+            child: albumArt(),
+          ),
         ),
       ),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(colors: [
-            Colors.black,
-            Colors.teal,
-          ]),
-        ),
-        child:
-        Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-          const Padding(padding: EdgeInsets.all(16.0)),
-          // Album cover
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.9,
-              height: MediaQuery.of(context).size.height / 3,
-              child: Center(
-                child: albumArt(),
-              ),
+
+      // Song title and artist
+      Column(
+        children: [
+          PlatformText(
+            widget.title,
+            style: const TextStyle(
+                fontWeight: FontWeight.bold, fontSize: 24, color: Colors.white),
+          ),
+          PlatformText(
+            widget.artist,
+            style: const TextStyle(fontSize: 18, color: Colors.white),
+          ),
+        ],
+      ),
+
+      // Seeker
+      Column(
+        children: [
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.9,
+            height: 30,
+            child: StreamBuilder<Duration>(
+              stream: _audioPlayer.positionStream,
+              builder: (context, snapshot) {
+                Duration progress = snapshot.data ?? const Duration();
+                return max == 0
+                    ? const CircularProgressIndicator()
+                    : PlatformSlider(
+                        activeColor: Colors.purple,
+                        value: progress.inMilliseconds.toDouble(),
+                        onChangeEnd: (double value) {
+                          _audioPlayer
+                              .seek(Duration(milliseconds: value.toInt()));
+                        },
+                        min: 0.0,
+                        max: max,
+                        onChanged: (value) {},
+                      );
+              },
             ),
           ),
-
-          // Song title and artist
-          Column(
-            children: [
-              PlatformText(
-                widget.title,
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                    color: Colors.white),
-              ),
-              PlatformText(
-                widget.artist,
-                style: const TextStyle(fontSize: 18, color: Colors.white),
-              ),
-            ],
+          Container(
+            child: StreamBuilder<Duration>(
+                stream: _audioPlayer.positionStream,
+                builder: (context, snapshot) {
+                  Duration progress = snapshot.data ?? const Duration();
+                  String sDuration =
+                      "${_audioPlayer.duration?.inMinutes.remainder(60)}:${(_audioPlayer.duration?.inSeconds.remainder(60))}";
+                  return Text(
+                    "${progress.inMinutes.remainder(60)}: ${progress.inSeconds.remainder(60)} / $max",
+                    style: const TextStyle(color: Colors.white),
+                  );
+                }),
           ),
-
-          // Seeker
-          Column(
-            children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.9,
-                height: 30,
-                child: StreamBuilder<Duration>(
-                  stream: _audioPlayer.positionStream,
-                  builder: (context, snapshot) {
-                    Duration progress = snapshot.data ?? const Duration();
-                    return max == 0 ? const CircularProgressIndicator() : PlatformSlider(
-                      activeColor: Colors.purple,
-                      value: progress.inMilliseconds.toDouble(),
-                      onChangeEnd: (double value) {
-                        _audioPlayer.seek(Duration(milliseconds: value.toInt()));
-                      },
-                      min: 0.0,
-                      max: max,
-                      onChanged: (value) {},
-                    );
-                  },
-                ),
-              ),
-              Container(
-                child: StreamBuilder<Duration>(
-                    stream: _audioPlayer.positionStream,
-                    builder: (context, snapshot) {
-                      Duration progress = snapshot.data ?? const Duration();
-                      String sDuration =
-                          "${_audioPlayer.duration?.inMinutes.remainder(60)}:${(_audioPlayer.duration?.inSeconds.remainder(60))}";
-                      return Text(
-                        "${progress.inMinutes.remainder(60)}: ${progress.inSeconds.remainder(60)} / $max",
-                        style: const TextStyle(color: Colors.white),
-                      );
-                    }),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(
-                fit: FlexFit.tight,
-                child: PlatformIconButton(
-                  materialIcon: const Icon(
-                    Icons.skip_previous,
-                    color: Colors.white,
-                  ),
-                  cupertinoIcon: const Icon(
-                    CupertinoIcons.backward,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {},
-                ),
-              ),
-              Flexible(
-                fit: FlexFit.tight,
-                child: PlatformElevatedButton(
-                  material: (context, platform) {
-                    return MaterialElevatedButtonData(
-                      style: ButtonStyle(
-                          backgroundColor:
-                          MaterialStateProperty.all(Colors.teal),
-                          shape: MaterialStateProperty.all<CircleBorder>(
-                              const CircleBorder())),
-                    );
-                  },
-                  cupertino: (context, platform) {
-                    return CupertinoElevatedButtonData(
-                      color: Colors.teal,
-                      borderRadius: BorderRadius.circular(60),
-                    );
-                  },
-                  color: Colors.teal,
-                  child: _isPlaying
-                      ? const Icon(Icons.pause)
-                      : const Icon(Icons.play_arrow),
-                  onPressed: () {
-                    _isPlaying ? _pause() : _play();
-                    setState(() {
-                      _isPlaying = !_isPlaying;
-                    });
-                  },
-                ),
-              ),
-              Flexible(
-                fit: FlexFit.tight,
-                child: PlatformIconButton(
-                  materialIcon: const Icon(
-                    Icons.skip_next,
-                    color: Colors.white,
-                  ),
-                  cupertinoIcon: const Icon(
-                    CupertinoIcons.forward_end_alt,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {},
-                ),
-              ),
-            ],
-          ),
-        ]),
+        ],
       ),
-    );
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
+            fit: FlexFit.tight,
+            child: PlatformIconButton(
+              materialIcon: const Icon(
+                Icons.skip_previous,
+                color: Colors.white,
+              ),
+              cupertinoIcon: const Icon(
+                CupertinoIcons.backward,
+                color: Colors.white,
+              ),
+              onPressed: () {},
+            ),
+          ),
+          Flexible(
+            fit: FlexFit.tight,
+            child: PlatformElevatedButton(
+              material: (context, platform) {
+                return MaterialElevatedButtonData(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.teal),
+                      shape: MaterialStateProperty.all<CircleBorder>(
+                          const CircleBorder())),
+                );
+              },
+              cupertino: (context, platform) {
+                return CupertinoElevatedButtonData(
+                  color: Colors.teal,
+                  borderRadius: BorderRadius.circular(60),
+                );
+              },
+              color: Colors.teal,
+              child: _isPlaying
+                  ? const Icon(Icons.pause)
+                  : const Icon(Icons.play_arrow),
+              onPressed: () {
+                _isPlaying ? _pause() : _play();
+                setState(() {
+                  _isPlaying = !_isPlaying;
+                });
+              },
+            ),
+          ),
+          Flexible(
+            fit: FlexFit.tight,
+            child: PlatformIconButton(
+              materialIcon: const Icon(
+                Icons.skip_next,
+                color: Colors.white,
+              ),
+              cupertinoIcon: const Icon(
+                CupertinoIcons.forward_end_alt,
+                color: Colors.white,
+              ),
+              onPressed: () {},
+            ),
+          ),
+        ],
+      ),
+    ]);
   }
 
   Widget miniPlayer() {
@@ -329,6 +312,16 @@ class _Player extends State<Player> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.isMiniPlayer ? miniPlayer() : fullPlayer();
+    return PlatformScaffold(
+
+      body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(colors: [
+              Colors.black,
+              Colors.teal,
+            ]),
+          ),
+          child: widget.isMiniPlayer ? miniPlayer() : fullPlayer()),
+    );
   }
 }

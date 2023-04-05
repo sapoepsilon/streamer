@@ -1,5 +1,6 @@
 class PlayingSong {
   final String songID;
+  final String url;
   final String title;
   final String artist;
   final String album;
@@ -7,6 +8,7 @@ class PlayingSong {
 
   PlayingSong({
     required this.songID,
+    required this.url,
     required this.title,
     required this.artist,
     required this.album,
