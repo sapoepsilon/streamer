@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
+import 'package:miniplayer/miniplayer.dart';
 import 'package:streamer/subsonic/requests/get_artists.dart';
 
 class Home extends StatefulWidget {
@@ -26,6 +27,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     fetchArtist(widget.subSonicContext);
     return Scaffold(
+
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: ElevatedButton(
         onPressed: () {},
