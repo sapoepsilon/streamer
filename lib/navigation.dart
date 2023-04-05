@@ -2,8 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:streamer/home.dart';
-import 'package:streamer/songs_list.dart';
-import 'package:streamer/playlist.dart';
+import 'package:streamer/pages/Songs_List.dart';
+import 'package:streamer/settings.dart';
+
 import 'package:streamer/subsonic/subsonic.dart';
 
 class Navigation extends StatefulWidget {
@@ -28,13 +29,12 @@ class _Navigation extends State<Navigation> {
       SongsList(subSonicContext: context),
       PlaylistList(ctx: context),
       Home(subSonicContext: context),
+      Container(),
+      const SettingsPage(),
+
       // Augusto please add your settings page here
     ];
-    if (index < 3) {
-      return children[index];
-    } else {
-      return children[0];
-    }
+    return children[index];
   }
 
   _changeTab(int index) {
