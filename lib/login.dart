@@ -3,13 +3,17 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:streamer/helpers/custom_models/credentials_model.dart';
 import 'package:streamer/helpers/globals.dart';
 import 'package:streamer/helpers/helpers.dart';
-import 'package:streamer/pages/Songs_List.dart';
+import 'package:streamer/songs_list.dart';
 import 'package:streamer/subsonic/context.dart';
 import 'package:streamer/subsonic/requests/ping.dart';
 import 'package:streamer/subsonic/response.dart';
 import 'package:streamer/utils/shared_preferences.dart';
+
+import 'navigation.dart';
+import 'playlist.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -24,11 +28,16 @@ class _Login extends State<Login> {
   String _username = "";
   String _password = "";
   bool shouldSaveCredentials = false;
+  List<Credentials> savedCredentials = [];
 
   @override
   void initState() {
     super.initState();
-    checkCredentials();
+    initCredentials();
+  }
+
+  void initCredentials() async {
+    await checkCredentials();
   }
 
   @override
@@ -39,20 +48,25 @@ class _Login extends State<Login> {
     return PlatformScaffold(
       material: (context, platform) {
         return MaterialScaffoldData(
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                scaffoldKey.currentState?.openEndDrawer();
-              },
-              backgroundColor: Colors.transparent,
-              child: const Icon(Icons.menu),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              scaffoldKey.currentState?.openEndDrawer();
+            },
+            backgroundColor: Colors.transparent,
+            child: const Icon(Icons.menu),
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+          endDrawer: Drawer(
+            backgroundColor: const Color.fromARGB(100, 0, 0, 0),
+            child: DrawerHeader(
+              child: ListView.builder(
+                  itemCount: savedCredentials.length,
+                  itemBuilder: (context, index) {
+                    return Text(savedCredentials[index].name);
+                  }),
             ),
-            floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-            endDrawer: Drawer(
-              backgroundColor: const Color.fromARGB(100, 0, 0, 0),
-              child: DrawerHeader(
-                  child: Image.network(
-                      "https://avatars.githubusercontent.com/u/108163041?s=96&v=4")),
-            ));
+          ),
+        );
       },
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
@@ -112,26 +126,25 @@ class _Login extends State<Login> {
     );
   }
 
-  void checkCredentials() async {
+  Future<void> checkCredentials() async {
     if (await getBool(isLoggedInKey)) {
-      final savedCredentials = await getCredentials();
-      setState(() {
-        savedCredentials.forEach((key, value) {
-          if (key == "username") {
-            _username = value;
-          } else if (key == "password") {
-            _password = value;
-          } else if (key == "server") {
-            _server = value;
-          }
+      savedCredentials = await getCredentials() ?? [];
+      for (var element in savedCredentials) {
+        debugPrint(element.name);
+        debugPrint(element.username);
+        debugPrint(element.password);
+        setState(() {
+          _name = element.name;
+          _username = element.username;
+          _password = element.password;
+          _server = element.server;
         });
-      });
+      }
       _connectToServer();
     }
   }
 
   void _connectToServer() async {
-    // ignore: unused_local_variable
     debugPrint("server: $_server");
     String errorMessage = "";
     final ctx = SubsonicContext(
@@ -152,16 +165,19 @@ class _Login extends State<Login> {
     });
 
     if (pong.status == ResponseStatus.ok) {
-      saveCredentials(_username, _password, _server);
+      saveCredentials(Credentials(
+          name: _name,
+          username: _username,
+          password: _password,
+          server: _server));
       // ignore: todo
       // TODO: move methods with context out of Async method
       // ignore: use_build_context_synchronously
+
       Navigator.of(context).push(platformPageRoute(
-          builder: (context) => SongsList(subSonicContext: ctx),
-          // ignore: todo
-          context: context)); //TODO: do not use Navigator in async method
+          builder: (context) => Navigation(subSonicContext: ctx),
+          context: context));
     } else {
-      // ignore: use_build_context_synchronously
       showErrorDialog(context, errorMessage);
     }
   }
@@ -272,11 +288,11 @@ class _Login extends State<Login> {
               shouldSaveCredentials = value;
               saveUser(isLoggedInKey, shouldSaveCredentials);
               if (shouldSaveCredentials) {
-                saveCredentials(
-                  _server,
-                  _username,
-                  _password,
-                );
+                saveCredentials(Credentials(
+                    name: _name,
+                    username: _username,
+                    password: _password,
+                    server: _server));
               }
             });
           },
