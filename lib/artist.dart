@@ -21,8 +21,190 @@ import 'package:streamer/subsonic/response.dart';
 This code is still not working as of March 27th
 I haven't been able to see how to access this code from the app yet
 
+
+Update: still not working at April 3rd
+
 */
 
+
+
+class ArtistSongs extends StatefulWidget {
+
+  final SubsonicContext subSonicContext;
+  final String sArtist;
+
+  const ArtistSongs({super.key, required this.subSonicContext, required this.sArtist});
+
+  @override
+  State<ArtistSongs> createState() => _ArtistSongs();
+}
+
+
+class _ArtistSongs extends State<ArtistSongs> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        // title: Text(widget.title),
+        actions: [
+          IconButton(
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: SearchArtist(),
+              );
+            },
+            icon: const Icon(Icons.search),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SearchArtist extends SearchDelegate {
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: const Icon(Icons.clear),
+        onPressed: () {
+          query = '';
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, null);
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    List<String> matchquery = [];
+    for (var _song in ) {
+      if (title.toLowerCase().contains(query.toLowerCase())) {
+        matchquery.add(title);
+      }
+    }
+    return ListView.builder(
+      itemCount: matchquery.length,
+      itemBuilder: (context, index) {
+        var result = matchquery[index];
+        return ListTile(title: Text(result));
+      },
+    );
+  }
+
+}
+/*
+class Search extends StatefulWidget {
+  const Search({super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _Search createState() => _Search();
+}
+
+
+class _Search extends State<Search> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        // title: Text(widget.title),
+        actions: [
+          IconButton(
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: CustomSearchDelegate(),
+              );
+            },
+            icon: const Icon(Icons.search),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CustomSearchDelegate extends SearchDelegate {
+  List<String> searchTerms = ['Quesariya', 'Lofi music', 'Believer'];
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: const Icon(Icons.clear),
+        onPressed: () {
+          query = '';
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, null);
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    List<String> matchquery = [];
+    for (var title in searchTerms) {
+      if (title.toLowerCase().contains(query.toLowerCase())) {
+        matchquery.add(title);
+      }
+    }
+    return ListView.builder(
+      itemCount: matchquery.length,
+      itemBuilder: (context, index) {
+        var result = matchquery[index];
+        return ListTile(title: Text(result));
+      },
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    List<String> matchquery = [];
+    for (var title in searchTerms) {
+      if (title.toLowerCase().contains(query.toLowerCase())) {
+        matchquery.add(title);
+      }
+    }
+    return ListView.builder(
+      itemCount: matchquery.length,
+      itemBuilder: (context, index) {
+        var result = matchquery[index];
+        return ListTile(title: Text(result));
+      },
+    );
+  }
+}
+
+*/
+
+
+
+
+
+
+
+
+
+/*
 class ArtistPage extends StatefulWidget {
 
   final SubsonicContext subSonicContext;
@@ -139,7 +321,7 @@ class _ArtistSongs extends State<ArtistPage> {
 
 
 
-/*
+
 
 
 
