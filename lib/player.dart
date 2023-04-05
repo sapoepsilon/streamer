@@ -298,8 +298,8 @@ class _Player extends State<Player> {
         } else {
           return Center(
             child: LoadingAnimationWidget.staggeredDotsWave(
-              // LoadingAnimationwidget that call the
-              color: Colors.green, // staggereddotwave animation
+              // LoadingAnimationWidget that call the
+              color: Colors.green, // staggeredDotWave animation
               size: 50,
             ),
           );
@@ -311,6 +311,34 @@ class _Player extends State<Player> {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
+      appBar: PlatformAppBar(
+        backgroundColor: Colors.transparent,
+        title: const Text(
+          'Now Playing',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(colors: [
+            Colors.black,
+            Colors.teal,
+          ]),
+        ),
+        child:
+            Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+          const Padding(padding: EdgeInsets.all(16.0)),
+          // Album cover
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.9,
+              height: MediaQuery.of(context).size.height / 3,
+              child: Center(
+                child: albumArt(),
+              ),
+            ),
+          ),
 
       body: Container(
           decoration: const BoxDecoration(

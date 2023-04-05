@@ -77,43 +77,46 @@ class _Login extends State<Login> {
                 height: double.infinity,
                 width: double.infinity,
                 decoration: const BoxDecoration(
-                  gradient: RadialGradient(
-                    colors: [
-                      Colors.teal,
-                      Colors.black,
-                    ],
-                    radius: .8,
-                  ),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    PlatformText(
-                      "Streamer",
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: screenSize.height * 0.15,
-                    ),
-                    field(isTablet, screenSize, _server,
-                        "http://192.168.0.34:4533", _getServerValueText),
-                    textFieldSpacer(screenSize),
-                    field(
-                        isTablet, screenSize, _name, "Name", _getNameValueText),
-                    textFieldSpacer(screenSize),
-                    field(isTablet, screenSize, _username, "Username",
-                        _getUsernameValueText),
-                    textFieldSpacer(screenSize),
-                    field(isTablet, screenSize, _password, "Password",
-                        _getPasswordValueText, true),
-                    textFieldSpacer(screenSize),
-                    rememberMe(isTablet, screenSize),
-                    connect(isTablet, screenSize)
-                    // buildforgotPassBtn(),
+                    gradient: RadialGradient(
+                  colors: [
+                    Colors.teal,
+                    Colors.black,
                   ],
+                  radius: .8,
+                )),
+                child: Center(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        PlatformText(
+                          "Streamer",
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          height: screenSize.height * 0.15,
+                        ),
+                        field(isTablet, screenSize, _server,
+                            "http://89.207.132.170:4533", _getServerValueText),
+                        textFieldSpacer(screenSize),
+                        field(isTablet, screenSize, _name, "Name",
+                            _getNameValueText),
+                        textFieldSpacer(screenSize),
+                        field(isTablet, screenSize, _username, "Username",
+                            _getUsernameValueText),
+                        textFieldSpacer(screenSize),
+                        field(isTablet, screenSize, _password, "Password",
+                            _getPasswordValueText, true),
+                        textFieldSpacer(screenSize),
+                        rememberMe(isTablet, screenSize),
+                        connect(isTablet, screenSize)
+                        // buildForgotPassBtn(),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ],

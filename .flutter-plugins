@@ -1,4 +1,5 @@
 # This is a generated file; do not edit or check into version control.
+
 audio_service=/Users/ismatullamansurov/.pub-cache/hosted/pub.dev/audio_service-0.18.9/
 audio_service_web=/Users/ismatullamansurov/.pub-cache/hosted/pub.dev/audio_service_web-0.1.1/
 audio_session=/Users/ismatullamansurov/.pub-cache/hosted/pub.dev/audio_session-0.1.13/
@@ -17,4 +18,3 @@ shared_preferences_linux=/Users/ismatullamansurov/.pub-cache/hosted/pub.dev/shar
 shared_preferences_web=/Users/ismatullamansurov/.pub-cache/hosted/pub.dev/shared_preferences_web-2.0.6/
 shared_preferences_windows=/Users/ismatullamansurov/.pub-cache/hosted/pub.dev/shared_preferences_windows-2.1.5/
 sqflite=/Users/ismatullamansurov/.pub-cache/hosted/pub.dev/sqflite-2.2.6/
-
