@@ -1,14 +1,19 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:streamer/helpers/custom_models/credentials_model.dart';
 import 'package:streamer/helpers/globals.dart';
 import 'package:streamer/helpers/helpers.dart';
+import 'package:streamer/songs_list.dart';
 import 'package:streamer/subsonic/context.dart';
 import 'package:streamer/subsonic/requests/ping.dart';
 import 'package:streamer/subsonic/response.dart';
 import 'package:streamer/utils/shared_preferences.dart';
 
-import 'package:streamer/navigation.dart';
+import 'navigation.dart';
+import 'playlist.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -23,11 +28,16 @@ class _Login extends State<Login> {
   String _username = "";
   String _password = "";
   bool shouldSaveCredentials = false;
+  List<Credentials> savedCredentials = [];
 
   @override
   void initState() {
     super.initState();
-    checkCredentials();
+    initCredentials();
+  }
+
+  void initCredentials() async {
+    await checkCredentials();
   }
 
   @override
@@ -38,20 +48,25 @@ class _Login extends State<Login> {
     return PlatformScaffold(
       material: (context, platform) {
         return MaterialScaffoldData(
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                scaffoldKey.currentState?.openEndDrawer();
-              },
-              backgroundColor: Colors.transparent,
-              child: const Icon(Icons.menu),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              scaffoldKey.currentState?.openEndDrawer();
+            },
+            backgroundColor: Colors.transparent,
+            child: const Icon(Icons.menu),
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+          endDrawer: Drawer(
+            backgroundColor: const Color.fromARGB(100, 0, 0, 0),
+            child: DrawerHeader(
+              child: ListView.builder(
+                  itemCount: savedCredentials.length,
+                  itemBuilder: (context, index) {
+                    return Text(savedCredentials[index].name);
+                  }),
             ),
-            floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-            endDrawer: Drawer(
-              backgroundColor: const Color.fromARGB(100, 0, 0, 0),
-              child: DrawerHeader(
-                  child: Image.network(
-                      "https://avatars.githubusercontent.com/u/108163041?s=96&v=4")),
-            ));
+          ),
+        );
       },
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
@@ -62,13 +77,14 @@ class _Login extends State<Login> {
                 height: double.infinity,
                 width: double.infinity,
                 decoration: const BoxDecoration(
-                    gradient: RadialGradient(
-                  colors: [
-                    Colors.teal,
-                    Colors.black,
-                  ],
-                  radius: .8,
-                )),
+                  gradient: RadialGradient(
+                    colors: [
+                      Colors.teal,
+                      Colors.black,
+                    ],
+                    radius: .8,
+                  ),
+                ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -83,19 +99,20 @@ class _Login extends State<Login> {
                       height: screenSize.height * 0.15,
                     ),
                     field(isTablet, screenSize, _server,
-                        "http://89.207.132.170:4533", _getServerValuetext),
+                        "http://192.168.0.34:4533", _getServerValueText),
                     textFieldSpacer(screenSize),
                     field(
-                        isTablet, screenSize, _name, "Name", _getNameValuetext),
+                        isTablet, screenSize, _name, "Name", _getNameValueText),
                     textFieldSpacer(screenSize),
                     field(isTablet, screenSize, _username, "Username",
-                        _getUsernameValuetext),
+                        _getUsernameValueText),
                     textFieldSpacer(screenSize),
                     field(isTablet, screenSize, _password, "Password",
-                        _getPasswordValuetext, true),
+                        _getPasswordValueText, true),
                     textFieldSpacer(screenSize),
                     rememberMe(isTablet, screenSize),
-                    conect(isTablet, screenSize)
+                    connect(isTablet, screenSize)
+                    // buildforgotPassBtn(),
                   ],
                 ),
               ),
@@ -106,20 +123,20 @@ class _Login extends State<Login> {
     );
   }
 
-  void checkCredentials() async {
+  Future<void> checkCredentials() async {
     if (await getBool(isLoggedInKey)) {
-      final savedCredentiais = await getCredentials();
-      setState(() {
-        savedCredentiais.forEach((key, value) {
-          if (key == "username") {
-            _username = value;
-          } else if (key == "password") {
-            _password = value;
-          } else if (key == "server") {
-            _server = value;
-          }
+      savedCredentials = await getCredentials() ?? [];
+      for (var element in savedCredentials) {
+        debugPrint(element.name);
+        debugPrint(element.username);
+        debugPrint(element.password);
+        setState(() {
+          _name = element.name;
+          _username = element.username;
+          _password = element.password;
+          _server = element.server;
         });
-      });
+      }
       _connectToServer();
     }
   }
@@ -145,7 +162,15 @@ class _Login extends State<Login> {
     });
 
     if (pong.status == ResponseStatus.ok) {
-      saveCredentials(_username, _password, _server);
+      saveCredentials(Credentials(
+          name: _name,
+          username: _username,
+          password: _password,
+          server: _server));
+      // ignore: todo
+      // TODO: move methods with context out of Async method
+      // ignore: use_build_context_synchronously
+
       Navigator.of(context).push(platformPageRoute(
           builder: (context) => Navigation(subSonicContext: ctx),
           context: context));
@@ -154,25 +179,25 @@ class _Login extends State<Login> {
     }
   }
 
-  void _getServerValuetext(String value) {
+  void _getServerValueText(String value) {
     setState(() {
       _server = value;
     });
   }
 
-  void _getNameValuetext(String value) {
+  void _getNameValueText(String value) {
     setState(() {
       _name = value;
     });
   }
 
-  void _getUsernameValuetext(String value) {
+  void _getUsernameValueText(String value) {
     setState(() {
       _username = value;
     });
   }
 
-  void _getPasswordValuetext(String value) {
+  void _getPasswordValueText(String value) {
     setState(() {
       _password = value;
     });
@@ -209,7 +234,7 @@ class _Login extends State<Login> {
     );
   }
 
-  Widget conect(bool isTablet, Size screenSize) {
+  Widget connect(bool isTablet, Size screenSize) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 25),
       width: isTablet ? 500 : screenSize.width * 0.8,
@@ -260,11 +285,11 @@ class _Login extends State<Login> {
               shouldSaveCredentials = value;
               saveUser(isLoggedInKey, shouldSaveCredentials);
               if (shouldSaveCredentials) {
-                saveCredentials(
-                  _server,
-                  _username,
-                  _password,
-                );
+                saveCredentials(Credentials(
+                    name: _name,
+                    username: _username,
+                    password: _password,
+                    server: _server));
               }
             });
           },

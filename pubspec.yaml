@@ -53,6 +53,7 @@ dependencies:
   just_audio_background: ^0.0.1-beta.9
   flutter_audio_waveforms: ^1.2.1+8
   siri_wave: ^0.2.2
+  miniplayer: ^1.0.1
 
 dev_dependencies:
   flutter_test:
@@ -71,10 +72,11 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
 
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
   uses-material-design: true
+  assets:
+    - images/Cover2.jpg
+
+
 
   # To add assets to your application, add an assets section, like this:
 

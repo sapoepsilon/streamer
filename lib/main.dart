@@ -1,14 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:just_audio_background/just_audio_background.dart';
-import 'package:streamer/utils/service_locator.dart';
-import 'audio_handler.dart';
 import 'login.dart';
 
 void main() {
   runApp(const MyApp());
 }
+final navigatorKey = GlobalKey();
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
